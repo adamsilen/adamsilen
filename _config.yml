@@ -20,7 +20,7 @@ theme_config:
   show_description: false
   lowecase_titles: false
 
-permalink: /:slug.html
+permalink: /:slug.html/
 
 collections:
   posts:
@@ -46,7 +46,7 @@ defaults:
       type: "pages"
     values:
       layout: page
-      permalink: /:title
+      permalink: /:title/
   - scope:
       path: "_drafts"
     values:
