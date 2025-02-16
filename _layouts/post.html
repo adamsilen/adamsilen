@@ -1,0 +1,43 @@
+---
+layout: default
+---
+
+{% include back_link.html url=page.url %}
+
+<article>
+  <div class="post-meta">
+    <time datetime="{{ page.date }}">{{ page.date | date: site.theme_config.date_format }}</time>
+  </div>
+  
+  <h1>{{ page.title }}</h1>
+
+  {{ content }}
+</article>
+
+
+<div class="pagination">
+  {% assign current_post_index = nil %}
+  {% for post in site.posts %}
+    {% if post.url == page.url %}
+      {% assign current_post_index = forloop.index0 %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if current_post_index %}
+    {% assign previous_post_index = current_post_index | minus: 1 %}
+    {% assign next_post_index = current_post_index | plus: 1 %}
+
+    {% if previous_post_index >= 0 %}
+      {% assign previous_post = site.posts[previous_post_index] %}
+      <a class="previous nav" href="{{ previous_post.url | relative_url }}">&laquo; {{ previous_post.title }}</a>
+    {% endif %}
+
+    {% if next_post_index < site.posts.size %}
+      {% assign next_post = site.posts[next_post_index] %}
+      <a class="next nav" href="{{ next_post.url | relative_url }}">{{ next_post.title }} &raquo;</a>
+    {% endif %}
+  {% endif %}
+</div>
+
+<script src="{{ site.baseurl }}/assets/js/back-link.js.liquid" defer></script>

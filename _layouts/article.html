@@ -1,0 +1,36 @@
+---
+layout: default
+---
+
+{% include back_link.html url=page.url %}
+
+<h1>{{ page.title }}</h1>
+{{ content }}
+
+<div class="pagination">
+    {% assign current_article_index = nil %}
+    {% for article in site.articles %}
+      {% if article.url == page.url %}
+        {% assign current_article_index = forloop.index0 %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  
+    {% if current_article_index %}
+      {% assign previous_article_index = current_article_index | minus: 1 %}
+      {% assign next_article_index = current_article_index | plus: 1 %}
+  
+      {% if previous_article_index >= 0 %}
+        {% assign previous_article = site.articles[previous_article_index] %}
+        <a class="previous nav" href="{{ previous_article.url | relative_url }}">&laquo; {{ previous_article.title }}</a>
+      {% endif %}
+  
+      {% if next_article_index < site.articles.size %}
+        {% assign next_article = site.articles[next_article_index] %}
+        <a class="next nav" href="{{ next_article.url | relative_url }}">{{ next_article.title }} &raquo;</a>
+      {% endif %}
+    {% endif %}
+  </div>
+
+<script src="{{ site.baseurl }}/assets/js/back-link.js.liquid" defer></script>
+  

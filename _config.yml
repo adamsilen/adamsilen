@@ -1,0 +1,74 @@
+title: Adam Silén
+author: Adam Silén
+email: adam.silen@outlook.com
+url: "adamsilen.se"
+baseurl: ""
+description: > 
+lang: sv-SE
+encoding: utf-8
+goat_counter: "adamsilen"
+
+favicon: "/site_icon.png"
+
+excerpt_separator: ""
+
+theme_config:
+  appearance: "auto"
+  back_home_text: "Hem"
+  back_link_text: "&laquo; Tillbaka"
+  date_format: "%Y-%m-%d"
+  show_description: false
+  lowecase_titles: false
+
+permalink: /:slug.html
+
+collections:
+  posts:
+    output: true
+  pages:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      custom_js:
+        - theme-toggle
+  - scope:
+      path: "_posts"
+      type: "posts"
+    values:
+      layout: post
+      permalink: /posts/:year-:month-:day-:title/
+      author: Adam Silén
+  - scope:
+      path: "_pages"
+      type: "pages"
+    values:
+      layout: page
+      permalink: /:title.html
+  - scope:
+      path: "_drafts"
+    values:
+      sitemap: false
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jektex
+  - jekyll-sitemap
+
+jektex:
+  cache_dir: ".jektex-cache"
+  ignore: ["*.xml"]
+  silent: false
+  macros:
+    - ["\\Q", "\\mathbb{Q}"]
+    - ["\\C", "\\mathbb{C}"]
+
+exclude:
+  - .jektex-cache
+
+kramdown:
+    smart_quotes: ["rsquo", "rsquo", "rdquo", "rdquo"]
+    footnote_backlink: "↑Back"

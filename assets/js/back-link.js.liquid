@@ -1,0 +1,28 @@
+---
+---
+document.addEventListener("DOMContentLoaded", function() {
+  const backLink = document.getElementById("back-link");
+  const domain = window.location.origin;
+  
+  // Update href attribute based on document.referrer
+  if (document.referrer && document.referrer.startsWith(domain)) {
+    backLink.href = document.referrer;
+  }
+  
+  backLink.addEventListener("click", function(e) {
+    e.preventDefault();
+    
+    if (window.history.length > 1) {
+      const previousPage = document.referrer;
+      
+      if (previousPage.startsWith(domain)) {
+        window.history.back();
+      } else {
+        window.location.href = "{{ site.baseurl }}/";
+      }
+    } else {
+      window.location.href = "{{ site.baseurl }}/";
+    }
+  });
+});
+

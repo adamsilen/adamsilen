@@ -1,0 +1,9 @@
+{% assign current_url_parts = include.url | split: '/' %}
+{% assign parent_url = current_url_parts | pop | join: '/' %}
+
+<nav class="top-nav">
+    <div class="nav-links">
+        <a id="back-link" class="nav" href="{{ site.baseurl }}/">{{ site.theme_config.back_link_text }}</a> | <a class="nav" href="{{ site.baseurl }}/">{{ site.theme_config.back_home_text }}</a>
+    </div>
+    {% include theme-toggle.html %}
+</nav>

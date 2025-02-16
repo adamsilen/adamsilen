@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /404.html
+Disallow: /drafts/
+Disallow: /_drafts/
+
+# Block AI Crawlers
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+Sitemap: /sitemap.xml

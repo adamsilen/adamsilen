@@ -1,0 +1,52 @@
+/*===============================
+  Base Styles
+===============================*/
+
+html,
+body {
+  background: var(--background-color);
+  color: var(--text-color);
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  scrollbar-color: var(--accent-background) var(--background-color);
+  scrollbar-width: thin;
+}
+
+body {
+  font-family: var(--theme-font);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  min-height: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p {
+  font-family: var(--body-font)
+}
+
+li {
+  font-family: var(--body-font);
+}
+
+
+/*===============================
+  Layout
+===============================*/
+
+.w {
+  max-width: 65ch;
+  margin: 0 auto;
+  padding: 2rem 1rem 8rem 1rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
