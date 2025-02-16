@@ -46,7 +46,7 @@ defaults:
       type: "pages"
     values:
       layout: page
-      permalink: /:title.html
+      permalink: /:title
   - scope:
       path: "_drafts"
     values:
