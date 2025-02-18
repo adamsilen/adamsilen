@@ -11,7 +11,7 @@ description:
   {% endfor %}
 </ul>
 
-
+<h2>Skrivet</h2>
 <ul class="post-list">
   {% for post in site.posts limit:3 %}
     <li>
@@ -26,4 +26,7 @@ description:
   {% endfor %}
 </ul>
 
-<div class="more-link"><a class="nav" href="/posts/">Visa fler »</a></div>
+<div class="more-link"><a class="nav" href="/texter/">Visa fler »</a></div>
+
+<h2>Fotat</h2>
+<p>(Kommer snart)</p>

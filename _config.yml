@@ -3,7 +3,7 @@ author: Adam Silén
 email: adam.silen@outlook.com
 url: "adamsilen.se"
 baseurl: ""
-description: > 
+description: Adam skriver och fotar för allmän beskådan.
 lang: sv-SE
 encoding: utf-8
 goat_counter: "adamsilen"
@@ -39,7 +39,7 @@ defaults:
       type: "posts"
     values:
       layout: post
-      permalink: /posts/:year-:month-:day-:title/
+      permalink: /texter/:year-:month-:day-:title/
       author: Adam Silén
   - scope:
       path: "_pages"
@@ -71,4 +71,4 @@ exclude:
 
 kramdown:
     smart_quotes: ["rsquo", "rsquo", "rdquo", "rdquo"]
-    footnote_backlink: "↑Back"
+    footnote_backlink: "↑ Tillbaka"

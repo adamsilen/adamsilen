@@ -29,6 +29,13 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
     font-style: italic;
   }
 
+  /*===============================
+    Header
+  ===============================*/
+
+  header h1 {
+    margin-block-end: 1.5rem;
+  }
   
   /*===============================
     Lists
@@ -391,6 +398,10 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
 .top-nav .theme-toggle-container {
     position: static;
     margin-left: 1rem;
+}
+
+header .theme-toggle-container {
+  top: 0.39rem;
 }
 
 #theme-toggle {

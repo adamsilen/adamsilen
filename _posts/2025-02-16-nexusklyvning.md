@@ -1,6 +1,7 @@
 ---
 title: Vad är nexusklyvning egentligen?
 date: 2025-02-16
+excerpt: En snäv exposé över en språkvetenskaplig term och de fyra som yttrat sig på nätet om denna.
 ---
 Har du någonsin googlat på **"nexusklyvning"**? Inte? Om man gör det i februari 2025 så får man hela tre träffar.
 
@@ -36,7 +37,7 @@ I "Handel med konst: Språk och dialog i Paul Sinebrychoffs brevsamling från se
 
 *Dess vidare öden, **innan det i somras förvärfvades af Palm**, äro höljda i det djupaste mörker.*
 
-Korpinen definierar nexusklyvning enligt som `ett fenomen där en bisats placeras mellan subjektet och predikatet` (och ger en Gösta Holm cred för både term och definition). 
+Korpinen definierar nexusklyvning som `ett fenomen där en bisats placeras mellan subjektet och predikatet` (och ger en Gösta Holm cred för både term och definition). 
 
 Hon redovisar sedan förekomsten av hela fem nexusklyvningar i brevsamlingen. Detta efter att ha konstaterat att "det formella svenska skriftspråket traditionellt har präglats av långa och komplicerade meningar". *Jo, jag tackar* hälsar bryggeridirektör Sinebrychoff. 
 
