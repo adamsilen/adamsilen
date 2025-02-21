@@ -9,5 +9,6 @@ gem "bigdecimal"
 gem "base64"
 gem "logger"
 gem 'jekyll-sitemap'
+gem 'digest', '~> 3.2.0'
 
 gemspec

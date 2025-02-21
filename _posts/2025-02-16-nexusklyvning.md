@@ -2,6 +2,7 @@
 title: Vad är nexusklyvning egentligen?
 date: 2025-02-16
 excerpt: En snäv exposé över en språkvetenskaplig term och de fyra som yttrat sig på nätet om denna.
+status: published
 ---
 Har du någonsin googlat på **"nexusklyvning"**? Inte? Om man gör det i februari 2025 så får man hela tre träffar.
 
