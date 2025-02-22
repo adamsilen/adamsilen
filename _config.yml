@@ -22,6 +22,9 @@ theme_config:
 
 permalink: /:slug.html/
 
+include:
+  - upload
+
 collections:
   posts:
     output: true
@@ -39,7 +42,7 @@ defaults:
       type: "posts"
     values:
       layout: post
-      permalink: /texter/:year-:month-:day-:title/
+      permalink: /skrivet/:year-:month-:day-:title/
       author: Adam Silén
   - scope:
       path: "_pages"
@@ -51,7 +54,7 @@ defaults:
       path: "_drafts"
     values:
       layout: post
-      permalink: /texter/:year-:month-:day-:title/
+      permalink: /skrivet/:year-:month-:day-:title/
       sitemap: false
 
 plugins:

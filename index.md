@@ -3,12 +3,14 @@ layout: home
 description:
 ---
 <ul class="page-links">
+{% if site.pages %}
 {% assign pages_with_order = site.pages | where_exp: "page", "page.order != nil" | sort: 'order' %}
 {% assign pages_without_order = site.pages | where_exp: "page", "page.order == nil" | sort: 'title' %}
 {% assign sorted_pages = pages_with_order | concat: pages_without_order %}
   {% for page in sorted_pages %}
     <li><a href="{{ page.url | relative_url }}">{{ page.title }}</a></li>
   {% endfor %}
+  {% endif %}
 </ul>
 
 <h2>Skrivet</h2>
@@ -26,7 +28,23 @@ description:
   {% endfor %}
 </ul>
 
-<div class="more-link"><a class="nav" href="/texter/">Visa fler »</a></div>
+<div class="more-link"><a class="nav" href="/skrivet/">Visa fler »</a></div>
 
 <h2>Fotat</h2>
-<p>(Kommer snart)</p>
+{% if site.data.photos %}
+<div class="photo-grid recent">
+  {% assign recent_photos = site.data.photos | sort: 'date' | reverse | limit: 9 %}
+  {% for photo in recent_photos %}
+    <div class="photo-item" 
+         data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
+         data-date="{{ photo.date | date: '%-d %B %Y' }}"
+         data-description="{{ photo.description }}">
+      <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-400,h-400" 
+           alt="{{ photo.description }}" 
+           loading="lazy">
+    </div>
+  {% endfor %}
+</div>
+
+<div class="more-link"><a class="nav" href="/photos/">Visa fler »</a></div>
+{% endif %}

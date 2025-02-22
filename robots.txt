@@ -3,6 +3,7 @@ Allow: /
 Disallow: /404.html
 Disallow: /drafts/
 Disallow: /_drafts/
+Disallow: /upload/
 
 # Block AI Crawlers
 User-agent: GPTBot

@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Arkiv
+title: Skrivet
 ---
 <ul class="post-list">
   {% for post in site.posts %}
