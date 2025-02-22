@@ -184,12 +184,13 @@ if (!photosYmlResponse.ok) {
 }
 
 
-            const photosYmlData = await photosYmlResponse.json();
-            let content = atob(photosYmlData.content);
+const photosYmlData = await photosYmlResponse.json();
+let content = decodeURIComponent(escape(atob(photosYmlData.content)));
             
             // Add new photo entry
-            const newEntry = `\n- date: ${date}\n  image: ${file.name}\n  description: "${description}"`;
+            const newEntry = `\n\n- date: ${date}\n  image: ${file.name}\n  description: "${description}"`;
             content = content + newEntry;
+
 
             // Update photos.yml
             const updateResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
@@ -200,11 +201,11 @@ if (!photosYmlResponse.ok) {
                 },
                 body: JSON.stringify({
                     message: `Add photo: ${file.name}`,
-                    content: btoa(content),
+                    content: btoa(unescape(encodeURIComponent(content))),
                     sha: photosYmlData.sha
                 })
             });
-
+            
             if (!updateResponse.ok) {
                 const errorData = await updateResponse.json();
                 throw new Error(`Failed to update photos.yml: ${errorData.message}`);
