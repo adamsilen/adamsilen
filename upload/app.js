@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
     dropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropzone.style.borderColor = '#000';
+        });
     });
 
     dropzone.addEventListener('dragleave', () => {
@@ -98,25 +99,24 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         submitButton.disabled = true;
-
+    
         try {
             const file = photoInput.files[0];
             if (!file) {
                 throw new Error('Please select an image');
             }
-
+    
             // Resize image
             const resizedBlob = await resizeImage(file);
             imageInfo.textContent += `\nResized: ${(resizedBlob.size / 1024 / 1024).toFixed(2)} MB`;
-
+    
             // Get credentials
             const uploadPassword = document.getElementById('uploadPassword').value;
-            const githubToken = document.getElementById('githubToken').value;
-
-            if (!uploadPassword || !githubToken) {
-                throw new Error('Please provide both upload password and GitHub token');
+    
+            if (!uploadPassword) {
+                throw new Error('Please provide the upload password');
             }
-
+    
             // Get auth parameters from Netlify function
             console.log('Getting signature...');
             const authResponse = await fetch(CONFIG.signatureEndpoint, {
@@ -126,15 +126,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({ password: uploadPassword })
             });
-
+    
             if (!authResponse.ok) {
                 const error = await authResponse.json();
                 throw new Error(error.error || 'Failed to get upload authentication');
             }
-
+    
             const authData = await authResponse.json();
             console.log('Got auth data:', authData);
-
+    
             // Upload using ImageKit SDK
             console.log('Uploading to ImageKit...');
             const uploadResult = await new Promise((resolve, reject) => {
@@ -155,48 +155,46 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             });
-
+    
             // Update photos.yml
             console.log('Updating photos.yml...');
             const date = document.getElementById('date').value;
             const description = document.getElementById('description').value;
             
-// Get current photos.yml content
-const [owner, repo] = CONFIG.githubRepo.split('/');
-const photosYmlUrl = `https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`;
-console.log('Fetching from:', photosYmlUrl); // Debug log
-
-const photosYmlResponse = await fetch(photosYmlUrl, {
-    headers: {
-        'Authorization': `token ${githubToken}`,
-        'Accept': 'application/vnd.github.v3+json'
-    }
-});
-
-if (!photosYmlResponse.ok) {
-    const errorData = await photosYmlResponse.json();
-    console.error('GitHub API error:', {
-        status: photosYmlResponse.status,
-        statusText: photosYmlResponse.statusText,
-        error: errorData
-    });
-    throw new Error(`Failed to fetch photos.yml: ${photosYmlResponse.status} ${photosYmlResponse.statusText}`);
-}
-
-
-const photosYmlData = await photosYmlResponse.json();
-let content = decodeURIComponent(escape(atob(photosYmlData.content)));
+            // Get current photos.yml content
+            const [owner, repo] = CONFIG.githubRepo.split('/');
+            const photosYmlUrl = `https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`;
+            console.log('Fetching from:', photosYmlUrl);
+    
+            const photosYmlResponse = await fetch(photosYmlUrl, {
+                headers: {
+                    'Authorization': `token ${authData.githubToken}`, // Use token from Netlify response
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+    
+            if (!photosYmlResponse.ok) {
+                const errorData = await photosYmlResponse.json();
+                console.error('GitHub API error:', {
+                    status: photosYmlResponse.status,
+                    statusText: photosYmlResponse.statusText,
+                    error: errorData
+                });
+                throw new Error(`Failed to fetch photos.yml: ${photosYmlResponse.status} ${photosYmlResponse.statusText}`);
+            }
+    
+            const photosYmlData = await photosYmlResponse.json();
+            let content = decodeURIComponent(escape(atob(photosYmlData.content)));
             
             // Add new photo entry
             const newEntry = `\n\n- date: ${date}\n  image: ${file.name}\n  description: "${description}"`;
             content = content + newEntry;
-
-
+    
             // Update photos.yml
             const updateResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `token ${githubToken}`,
+                    'Authorization': `token ${authData.githubToken}`, // Use token from Netlify response
                     'Accept': 'application/vnd.github.v3+json'
                 },
                 body: JSON.stringify({
@@ -210,7 +208,7 @@ let content = decodeURIComponent(escape(atob(photosYmlData.content)));
                 const errorData = await updateResponse.json();
                 throw new Error(`Failed to update photos.yml: ${errorData.message}`);
             }
-
+    
             console.log('Upload complete!');
             alert('Photo uploaded successfully!');
             form.reset();
@@ -218,7 +216,7 @@ let content = decodeURIComponent(escape(atob(photosYmlData.content)));
             dropText.style.display = 'block';
             imageInfo.textContent = '';
             dateInput.value = today;
-
+    
         } catch (error) {
             console.error('Upload error:', error);
             alert('Error: ' + error.message);
@@ -226,4 +224,3 @@ let content = decodeURIComponent(escape(atob(photosYmlData.content)));
             submitButton.disabled = false;
         }
     });
-});
