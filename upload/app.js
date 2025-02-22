@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', function() {
     dropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
         dropzone.style.borderColor = '#000';
-        });
     });
 
     dropzone.addEventListener('dragleave', () => {
@@ -224,3 +223,4 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.disabled = false;
         }
     });
+});
