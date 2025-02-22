@@ -169,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
+            
 
             if (!photosYmlResponse.ok) {
                 throw new Error('Failed to fetch photos.yml');
