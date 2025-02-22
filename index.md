@@ -47,4 +47,19 @@ description:
 </div>
 
 <div class="more-link"><a class="nav" href="/photos/">Visa fler »</a></div>
+
+<div id="lightbox" class="lightbox">
+  <button class="close">&times;</button>
+  <button class="prev">&larr;</button>
+  <button class="next">&rarr;</button>
+  <div class="lightbox-content">
+    <img src="" alt="">
+    <div class="photo-info">
+      <div class="photo-date"></div>
+      <p class="photo-description"></p>
+    </div>
+  </div>
+</div>
+
+
 {% endif %}

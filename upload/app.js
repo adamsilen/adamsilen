@@ -161,19 +161,28 @@ document.addEventListener('DOMContentLoaded', function() {
             const date = document.getElementById('date').value;
             const description = document.getElementById('description').value;
             
-            // Get current photos.yml content
-            const [owner, repo] = CONFIG.githubRepo.split('/');
-            const photosYmlResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
-                headers: {
-                    'Authorization': `token ${githubToken}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-            
+// Get current photos.yml content
+const [owner, repo] = CONFIG.githubRepo.split('/');
+const photosYmlUrl = `https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`;
+console.log('Fetching from:', photosYmlUrl); // Debug log
 
-            if (!photosYmlResponse.ok) {
-                throw new Error('Failed to fetch photos.yml');
-            }
+const photosYmlResponse = await fetch(photosYmlUrl, {
+    headers: {
+        'Authorization': `token ${githubToken}`,
+        'Accept': 'application/vnd.github.v3+json'
+    }
+});
+
+if (!photosYmlResponse.ok) {
+    const errorData = await photosYmlResponse.json();
+    console.error('GitHub API error:', {
+        status: photosYmlResponse.status,
+        statusText: photosYmlResponse.statusText,
+        error: errorData
+    });
+    throw new Error(`Failed to fetch photos.yml: ${photosYmlResponse.status} ${photosYmlResponse.statusText}`);
+}
+
 
             const photosYmlData = await photosYmlResponse.json();
             let content = atob(photosYmlData.content);
