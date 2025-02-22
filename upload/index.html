@@ -97,15 +97,26 @@
         
         <div class="credentials">
             <h2>Credentials</h2>
-            <div class="form-group">
-                <label for="uploadPassword">Password</label>
-                <input type="password" id="uploadPassword" required>
-            </div>
-            <div class="form-group">
-                <label for="githubToken">GitHub Personal Access Token</label>
-                <input type="password" id="githubToken" required>
-            </div>
+            <form id="credentials-form" autocomplete="on">
+                <div class="form-group">
+                    <label for="uploadPassword">Password</label>
+                    <input type="password" 
+                           id="uploadPassword" 
+                           name="upload-password"
+                           autocomplete="current-password"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="githubToken">GitHub Personal Access Token</label>
+                    <input type="password" 
+                           id="githubToken" 
+                           name="github-token"
+                           autocomplete="current-password"
+                           required>
+                </div>
+            </form>
         </div>
+        
 
         <form id="uploadForm">
             <div class="preview-container" id="dropzone">
