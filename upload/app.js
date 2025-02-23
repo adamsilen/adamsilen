@@ -198,7 +198,7 @@ for (const container of containers) {
         const fileName = fileInfo.substring(0, fileInfo.indexOf(' ('));
         console.log('Looking for file:', fileName);
 
-        const file = selectedFiles.get(fileName); // Get file from Map
+        const file = selectedFiles.get(fileName);
         if (!file) {
             console.error(`File not found: ${fileName}`);
             continue;
@@ -208,6 +208,21 @@ for (const container of containers) {
 
         const date = container.querySelector('input[type="date"]').value;
         const description = container.querySelector('textarea').value;
+
+        // Get fresh auth parameters for each file
+        const authResponse = await fetch(CONFIG.signatureEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ password: uploadPassword })
+        });
+
+        if (!authResponse.ok) {
+            throw new Error('Failed to get upload authentication');
+        }
+
+        const authData = await authResponse.json();
 
         // Resize and upload image
         const resizedBlob = await resizeImage(file);
@@ -243,6 +258,7 @@ for (const container of containers) {
         console.error(`Error processing ${container.querySelector('.file-info').textContent}:`, error);
     }
 }
+
 
 console.log('Final entries:', newEntries);
             // Get current photos.yml content

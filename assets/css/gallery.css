@@ -86,13 +86,13 @@
 
 .lightbox .prev {
   left: 1rem;
-  top: 50%;
+  top: 90%;
   transform: translateY(-50%);
 }
 
 .lightbox .next {
   right: 1rem;
-  top: 50%;
+  top: 90%;
   transform: translateY(-50%);
 }
 
@@ -100,4 +100,17 @@
   .photo-grid.recent {
     grid-template-columns: repeat(2, 1fr);
   }
+
+      .photo-grid.recent .photo-item:nth-child(n+10) {
+        display: none;
+    }
+
+    .lightbox {
+      padding: 0;
+    }
+
+}
+
+.grid-size-detector {
+  display: none;
 }

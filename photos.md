@@ -9,7 +9,7 @@ title: Fotat
          data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
          data-date="{{ photo.date | date: '%-d %B %Y' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december'}}"
          data-description="{{ photo.description }}">
-      <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-400,h-400" 
+      <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-400,h-400,pr-true" 
            alt="{{ photo.description }}" 
            loading="lazy">
     </div>
@@ -28,3 +28,5 @@ title: Fotat
     </div>
   </div>
 </div>
+
+<a class="nav" href="{{ site.baseurl }}/">« {{ site.theme_config.back_home_text }}</a>

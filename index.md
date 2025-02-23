@@ -34,17 +34,20 @@ description:
 {% if site.data.photos %}
 <div class="photo-grid recent">
   {% assign recent_photos = site.data.photos | sort: 'date' | reverse %}
-  {% for photo in recent_photos limit: 9 %}
+  {% assign limit_photos = 9 %}
+  <div class="grid-size-detector"></div>
+  {% for photo in recent_photos limit: limit_photos %}
     <div class="photo-item" 
          data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
          data-date="{{ photo.date | date: '%-d %B %Y' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december'}}"
          data-description="{{ photo.description }}">
-      <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-400,h-400" 
+      <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-400,h-400,pr-true" 
            alt="{{ photo.description }}" 
            loading="lazy">
     </div>
   {% endfor %}
 </div>
+
 
 <div class="more-link"><a class="nav" href="/photos/">Visa fler »</a></div>
 
