@@ -2,31 +2,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('uploadForm');
     const dropzone = document.getElementById('dropzone');
     const photoInput = document.getElementById('photoInput');
-    const preview = document.getElementById('preview');
-    const dropText = document.getElementById('dropText');
     const submitButton = document.getElementById('submitButton');
     const imageInfo = document.getElementById('imageInfo');
-    const dateInput = document.getElementById('date');
+    const dropText = document.getElementById('dropText');
 
-    // Set default date to today
+    // Get today's date for new uploads
     const today = new Date().toISOString().split('T')[0];
-    dateInput.value = today;
 
     // Handle file selection
     dropzone.addEventListener('click', () => photoInput.click());
 
     dropzone.addEventListener('dragover', (e) => {
         e.preventDefault();
-        dropzone.style.borderColor = '#000';
+        dropzone.style.borderColor = 'var(--text-color)';
     });
 
     dropzone.addEventListener('dragleave', () => {
-        dropzone.style.borderColor = '#ccc';
+        dropzone.style.borderColor = 'var(--text-color)';
     });
 
     dropzone.addEventListener('drop', (e) => {
         e.preventDefault();
-        dropzone.style.borderColor = '#ccc';
+        dropzone.style.borderColor = 'var(--text-color)';
         handleFiles(e.dataTransfer.files);
     });
 
@@ -34,32 +31,89 @@ document.addEventListener('DOMContentLoaded', function() {
         handleFiles(e.target.files);
     });
 
+
     async function handleFiles(files) {
-        const file = files[0];
-        console.log('File selected:', file);
-        if (!file || !file.type.startsWith('image/')) {
-            alert('Please select an image file.');
-            return;
+        // Create preview grid if it doesn't exist
+        let previewGrid = document.querySelector('.preview-grid');
+        if (!previewGrid) {
+            previewGrid = document.createElement('div');
+            previewGrid.className = 'preview-grid';
+            dropzone.insertAdjacentElement('afterend', previewGrid);
         }
-
-        // Show original image info
-        imageInfo.textContent = `Original: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-        console.log('File info updated');
-
-        // Create preview
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            preview.src = e.target.result;
-            preview.style.display = 'block';
-            dropText.style.display = 'none';
-            console.log('Preview created'); // Debug log
-        };
-        reader.readAsDataURL(file);
-
-        // Enable submit button
-        submitButton.disabled = false;
-        console.log('Submit button enabled'); // Debug log
+        
+        // Show info for all files
+        for (const file of files) {
+            if (!file.type.startsWith('image/')) {
+                alert(`File ${file.name} is not an image.`);
+                continue;
+            }
+    
+            // Create container for each image and its fields
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-upload-container';
+    
+            // Add remove button
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'remove-image';
+            removeButton.innerHTML = '&times;';
+            removeButton.title = 'Remove image';
+            removeButton.onclick = () => {
+                imageContainer.remove();
+                // Disable submit button if no images left
+                submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
+            };
+            imageContainer.appendChild(removeButton);
+    
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-thumbnail';
+                imageContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+    
+            // Add file info
+            const fileInfo = document.createElement('div');
+            fileInfo.className = 'file-info';
+            fileInfo.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            imageContainer.appendChild(fileInfo);
+    
+            // Add date picker
+            const dateGroup = document.createElement('div');
+            dateGroup.className = 'form-group';
+            const dateLabel = document.createElement('label');
+            dateLabel.textContent = 'Date:';
+            const dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            dateInput.value = today;
+            dateInput.required = true;
+            dateGroup.appendChild(dateLabel);
+            dateGroup.appendChild(dateInput);
+            imageContainer.appendChild(dateGroup);
+    
+            // Add description field
+            const descGroup = document.createElement('div');
+            descGroup.className = 'form-group';
+            const descLabel = document.createElement('label');
+            descLabel.textContent = 'Description:';
+            const descInput = document.createElement('textarea');
+            descInput.required = true;
+            descGroup.appendChild(descLabel);
+            descGroup.appendChild(descInput);
+            imageContainer.appendChild(descGroup);
+    
+            previewGrid.appendChild(imageContainer);
+        }
+    
+        // Enable submit button if there are any images
+        submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
     }
+    
+    
+    
 
     async function resizeImage(file) {
         return new Promise((resolve) => {
@@ -100,24 +154,18 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = true;
     
         try {
-            const file = photoInput.files[0];
-            if (!file) {
-                throw new Error('Please select an image');
+            const files = photoInput.files;
+            if (!files.length) {
+                throw new Error('Please select at least one image');
             }
     
-            // Resize image
-            const resizedBlob = await resizeImage(file);
-            imageInfo.textContent += `\nResized: ${(resizedBlob.size / 1024 / 1024).toFixed(2)} MB`;
-    
-            // Get credentials
+            // Get credentials once for all uploads
             const uploadPassword = document.getElementById('uploadPassword').value;
-    
             if (!uploadPassword) {
                 throw new Error('Please provide the upload password');
             }
     
             // Get auth parameters from Netlify function
-            console.log('Getting signature...');
             const authResponse = await fetch(CONFIG.signatureEndpoint, {
                 method: 'POST',
                 headers: {
@@ -132,89 +180,78 @@ document.addEventListener('DOMContentLoaded', function() {
             }
     
             const authData = await authResponse.json();
-            console.log('Got auth data:', authData);
     
-            // Upload using ImageKit SDK
-            console.log('Uploading to ImageKit...');
-            const uploadResult = await new Promise((resolve, reject) => {
-                imagekit.upload({
-                    file: resizedBlob,
-                    fileName: file.name,
-                    token: authData.token,
-                    signature: authData.signature,
-                    expire: authData.expire,
-                    useUniqueFileName: false
-                }, function(err, result) {
-                    if (err) {
-                        console.error('ImageKit upload error:', err);
-                        reject(err);
-                    } else {
-                        console.log('ImageKit upload success:', result);
-                        resolve(result);
+            // Process each image
+            for (const file of files) {
+                console.log(`Processing ${file.name}...`);
+    
+                // Find the container for this file
+                const container = [...document.querySelectorAll('.image-upload-container')]
+                    .find(c => c.querySelector('.file-info').textContent.includes(file.name));
+                
+                if (!container) continue;
+    
+                // Get values from this container's fields
+                const date = container.querySelector('input[type="date"]').value;
+                const description = container.querySelector('textarea').value;
+    
+                // Resize image
+                const resizedBlob = await resizeImage(file);
+                
+                // Upload to ImageKit
+                const uploadResult = await new Promise((resolve, reject) => {
+                    imagekit.upload({
+                        file: resizedBlob,
+                        fileName: file.name,
+                        token: authData.token,
+                        signature: authData.signature,
+                        expire: authData.expire,
+                        useUniqueFileName: false
+                    }, function(err, result) {
+                        if (err) reject(err);
+                        else resolve(result);
+                    });
+                });
+    
+                // Get and update photos.yml
+                const [owner, repo] = CONFIG.githubRepo.split('/');
+                const photosYmlResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
+                    headers: {
+                        'Authorization': `token ${authData.githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
                     }
                 });
-            });
     
-            // Update photos.yml
-            console.log('Updating photos.yml...');
-            const date = document.getElementById('date').value;
-            const description = document.getElementById('description').value;
-            
-            // Get current photos.yml content
-            const [owner, repo] = CONFIG.githubRepo.split('/');
-            const photosYmlUrl = `https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`;
-            console.log('Fetching from:', photosYmlUrl);
-    
-            const photosYmlResponse = await fetch(photosYmlUrl, {
-                headers: {
-                    'Authorization': `token ${authData.githubToken}`, // Use token from Netlify response
-                    'Accept': 'application/vnd.github.v3+json'
+                if (!photosYmlResponse.ok) {
+                    throw new Error(`Failed to fetch photos.yml for ${file.name}`);
                 }
-            });
     
-            if (!photosYmlResponse.ok) {
-                const errorData = await photosYmlResponse.json();
-                console.error('GitHub API error:', {
-                    status: photosYmlResponse.status,
-                    statusText: photosYmlResponse.statusText,
-                    error: errorData
+                const photosYmlData = await photosYmlResponse.json();
+                let content = decodeURIComponent(escape(atob(photosYmlData.content)));
+                
+                const newEntry = `\n\n- date: ${date}\n  image: ${file.name}\n  description: "${description}"`;
+                content = content + newEntry;
+    
+                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${authData.githubToken}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        message: `Add photo: ${file.name}`,
+                        content: btoa(unescape(encodeURIComponent(content))),
+                        sha: photosYmlData.sha
+                    })
                 });
-                throw new Error(`Failed to fetch photos.yml: ${photosYmlResponse.status} ${photosYmlResponse.statusText}`);
             }
     
-            const photosYmlData = await photosYmlResponse.json();
-            let content = decodeURIComponent(escape(atob(photosYmlData.content)));
-            
-            // Add new photo entry
-            const newEntry = `\n\n- date: ${date}\n  image: ${file.name}\n  description: "${description}"`;
-            content = content + newEntry;
-    
-            // Update photos.yml
-            const updateResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${authData.githubToken}`, // Use token from Netlify response
-                    'Accept': 'application/vnd.github.v3+json'
-                },
-                body: JSON.stringify({
-                    message: `Add photo: ${file.name}`,
-                    content: btoa(unescape(encodeURIComponent(content))),
-                    sha: photosYmlData.sha
-                })
-            });
-            
-            if (!updateResponse.ok) {
-                const errorData = await updateResponse.json();
-                throw new Error(`Failed to update photos.yml: ${errorData.message}`);
-            }
-    
-            console.log('Upload complete!');
-            alert('Photo uploaded successfully!');
+            alert('All photos uploaded successfully!');
             form.reset();
-            preview.style.display = 'none';
+            const previewGrid = document.querySelector('.preview-grid');
+            if (previewGrid) previewGrid.remove();
             dropText.style.display = 'block';
             imageInfo.textContent = '';
-            dateInput.value = today;
     
         } catch (error) {
             console.error('Upload error:', error);
@@ -223,4 +260,6 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.disabled = false;
         }
     });
+    
+    
 });
