@@ -48,68 +48,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 continue;
             }
     
-            // Create container for each image and its fields
-            const imageContainer = document.createElement('div');
-            imageContainer.className = 'image-upload-container';
-    
-            // Add remove button
-            const removeButton = document.createElement('button');
-            removeButton.type = 'button';
-            removeButton.className = 'remove-image';
-            removeButton.innerHTML = '&times;';
-            removeButton.title = 'Remove image';
-            removeButton.onclick = () => {
-                imageContainer.remove();
-                // Disable submit button if no images left
-                submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
-            };
-            imageContainer.appendChild(removeButton);
-    
-            // Create preview
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'preview-thumbnail';
-                imageContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-    
-            // Add file info
-            const fileInfo = document.createElement('div');
-            fileInfo.className = 'file-info';
-            fileInfo.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-            imageContainer.appendChild(fileInfo);
-    
-            // Add date picker
-            const dateGroup = document.createElement('div');
-            dateGroup.className = 'form-group';
-            const dateLabel = document.createElement('label');
-            dateLabel.textContent = 'Date:';
-            const dateInput = document.createElement('input');
-            dateInput.type = 'date';
-            dateInput.value = today;
-            dateInput.required = true;
-            dateGroup.appendChild(dateLabel);
-            dateGroup.appendChild(dateInput);
-            imageContainer.appendChild(dateGroup);
-    
-            // Add description field
-            const descGroup = document.createElement('div');
-            descGroup.className = 'form-group';
-            const descLabel = document.createElement('label');
-            descLabel.textContent = 'Description:';
-            const descInput = document.createElement('textarea');
-            descInput.required = true;
-            descGroup.appendChild(descLabel);
-            descGroup.appendChild(descInput);
-            imageContainer.appendChild(descGroup);
-    
-            previewGrid.appendChild(imageContainer);
+// Create container for each image and its fields
+const imageContainer = document.createElement('div');
+imageContainer.className = 'image-upload-container';
+
+// Add remove button
+const removeButton = document.createElement('button');
+removeButton.type = 'button';
+removeButton.className = 'remove-image';
+removeButton.innerHTML = '&times;';
+removeButton.title = 'Remove image';
+removeButton.onclick = () => {
+    imageContainer.remove();
+    // Disable submit button if no images left
+    submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
+};
+imageContainer.appendChild(removeButton);
+
+// Create preview image
+const img = document.createElement('img');
+img.src = URL.createObjectURL(file);
+img.className = 'preview-thumbnail';
+imageContainer.appendChild(img);
+
+// Add file info
+const fileInfo = document.createElement('div');
+fileInfo.className = 'file-info';
+fileInfo.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+imageContainer.appendChild(fileInfo);
+
+// Add date picker
+const dateGroup = document.createElement('div');
+dateGroup.className = 'form-group';
+const dateLabel = document.createElement('label');
+dateLabel.textContent = 'Date:';
+const dateInput = document.createElement('input');
+dateInput.type = 'date';
+dateInput.required = true;
+dateInput.value = today; // Use today's date as default
+
+dateGroup.appendChild(dateLabel);
+dateGroup.appendChild(dateInput);
+imageContainer.appendChild(dateGroup);
+
+
+
+// Add description field
+const descGroup = document.createElement('div');
+descGroup.className = 'form-group';
+const descLabel = document.createElement('label');
+descLabel.textContent = 'Description:';
+const descInput = document.createElement('textarea');
+descInput.required = true;
+descGroup.appendChild(descLabel);
+descGroup.appendChild(descInput);
+imageContainer.appendChild(descGroup);
+
+previewGrid.appendChild(imageContainer);
+
         }
     
         // Enable submit button if there are any images
         submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
+
+
     }
     
     
