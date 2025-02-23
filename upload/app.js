@@ -154,8 +154,8 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = true;
     
         try {
-            const files = photoInput.files;
-            if (!files.length) {
+            const containers = document.querySelectorAll('.image-upload-container');
+            if (!containers.length) {
                 throw new Error('Please select at least one image');
             }
     
@@ -181,28 +181,28 @@ document.addEventListener('DOMContentLoaded', function() {
     
             const authData = await authResponse.json();
     
-            // Process each image
-            for (const file of files) {
-                console.log(`Processing ${file.name}...`);
+            // Collect all new entries
+            let newEntries = [];
     
-                // Find the container for this file
-                const container = [...document.querySelectorAll('.image-upload-container')]
-                    .find(c => c.querySelector('.file-info').textContent.includes(file.name));
-                
-                if (!container) continue;
+            // Process each image container
+            for (const container of containers) {
+                const fileInfo = container.querySelector('.file-info').textContent;
+                const fileName = fileInfo.substring(0, fileInfo.indexOf(' ('));
+                const file = Array.from(photoInput.files).find(f => f.name === fileName);
+                if (!file) continue;
     
-                // Get values from this container's fields
+                console.log(`Processing ${fileName}...`);
+    
                 const date = container.querySelector('input[type="date"]').value;
                 const description = container.querySelector('textarea').value;
     
-                // Resize image
+                // Resize and upload image
                 const resizedBlob = await resizeImage(file);
                 
-                // Upload to ImageKit
                 const uploadResult = await new Promise((resolve, reject) => {
                     imagekit.upload({
                         file: resizedBlob,
-                        fileName: file.name,
+                        fileName: fileName,
                         token: authData.token,
                         signature: authData.signature,
                         expire: authData.expire,
@@ -213,38 +213,50 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                 });
     
-                // Get and update photos.yml
-                const [owner, repo] = CONFIG.githubRepo.split('/');
-                const photosYmlResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
-                    headers: {
-                        'Authorization': `token ${authData.githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-    
-                if (!photosYmlResponse.ok) {
-                    throw new Error(`Failed to fetch photos.yml for ${file.name}`);
-                }
-    
-                const photosYmlData = await photosYmlResponse.json();
-                let content = decodeURIComponent(escape(atob(photosYmlData.content)));
-                
-                const newEntry = `\n\n- date: ${date}\n  image: ${file.name}\n  description: "${description}"`;
-                content = content + newEntry;
-    
-                await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `token ${authData.githubToken}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        message: `Add photo: ${file.name}`,
-                        content: btoa(unescape(encodeURIComponent(content))),
-                        sha: photosYmlData.sha
-                    })
+                // Collect the entry
+                newEntries.push({
+                    date,
+                    fileName,
+                    description
                 });
             }
+    
+            // Get current photos.yml content
+            const [owner, repo] = CONFIG.githubRepo.split('/');
+            const photosYmlResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
+                headers: {
+                    'Authorization': `token ${authData.githubToken}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+    
+            if (!photosYmlResponse.ok) {
+                throw new Error('Failed to fetch photos.yml');
+            }
+    
+            const photosYmlData = await photosYmlResponse.json();
+            let content = decodeURIComponent(escape(atob(photosYmlData.content)));
+    
+            // Add all new entries at once
+            const allNewEntries = newEntries
+                .map(entry => `\n\n- date: ${entry.date}\n  image: ${entry.fileName}\n  description: "${entry.description}"`)
+                .join('');
+            
+            content = content + allNewEntries;
+    
+            // Single update to photos.yml
+            await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${authData.githubToken}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify({
+                    message: `Add photos: ${newEntries.map(e => e.fileName).join(', ')}`,
+                    content: btoa(unescape(encodeURIComponent(content))),
+                    sha: photosYmlData.sha
+                })
+            });
     
             alert('All photos uploaded successfully!');
             form.reset();
