@@ -33,8 +33,8 @@ description:
 <h2>Fotat</h2>
 {% if site.data.photos %}
 <div class="photo-grid recent">
-  {% assign recent_photos = site.data.photos | sort: 'date' | reverse | limit: 9 %}
-  {% for photo in recent_photos %}
+  {% assign recent_photos = site.data.photos | sort: 'date' | reverse %}
+  {% for photo in recent_photos limit: 9 %}
     <div class="photo-item" 
          data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
          data-date="{{ photo.date | date: '%-d %B %Y' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december'}}"

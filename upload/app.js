@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Add this Map to store all selected files
+    let selectedFiles = new Map();
+
     const form = document.getElementById('uploadForm');
     const dropzone = document.getElementById('dropzone');
     const photoInput = document.getElementById('photoInput');
@@ -31,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
         handleFiles(e.target.files);
     });
 
-
     async function handleFiles(files) {
         // Create preview grid if it doesn't exist
         let previewGrid = document.querySelector('.preview-grid');
@@ -47,73 +49,72 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert(`File ${file.name} is not an image.`);
                 continue;
             }
-    
-// Create container for each image and its fields
-const imageContainer = document.createElement('div');
-imageContainer.className = 'image-upload-container';
 
-// Add remove button
-const removeButton = document.createElement('button');
-removeButton.type = 'button';
-removeButton.className = 'remove-image';
-removeButton.innerHTML = '&times;';
-removeButton.title = 'Remove image';
-removeButton.onclick = () => {
-    imageContainer.remove();
-    // Disable submit button if no images left
-    submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
-};
-imageContainer.appendChild(removeButton);
+            // Store file in our Map
+            selectedFiles.set(file.name, file);
 
-// Create preview image
-const img = document.createElement('img');
-img.src = URL.createObjectURL(file);
-img.className = 'preview-thumbnail';
-imageContainer.appendChild(img);
+            // Create container for each image and its fields
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'image-upload-container';
 
-// Add file info
-const fileInfo = document.createElement('div');
-fileInfo.className = 'file-info';
-fileInfo.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-imageContainer.appendChild(fileInfo);
+            // Add remove button
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'remove-image';
+            removeButton.innerHTML = '&times;';
+            removeButton.title = 'Remove image';
+            removeButton.onclick = () => {
+                selectedFiles.delete(file.name); // Remove file from Map when container is removed
+                imageContainer.remove();
+                // Disable submit button if no images left
+                submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
+            };
+            imageContainer.appendChild(removeButton);
 
-// Add date picker
-const dateGroup = document.createElement('div');
-dateGroup.className = 'form-group';
-const dateLabel = document.createElement('label');
-dateLabel.textContent = 'Date:';
-const dateInput = document.createElement('input');
-dateInput.type = 'date';
-dateInput.required = true;
-dateInput.value = today; // Use today's date as default
+            // Create preview image
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.className = 'preview-thumbnail';
+            imageContainer.appendChild(img);
 
-dateGroup.appendChild(dateLabel);
-dateGroup.appendChild(dateInput);
-imageContainer.appendChild(dateGroup);
+            // Add file info
+            const fileInfo = document.createElement('div');
+            fileInfo.className = 'file-info';
+            fileInfo.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+            imageContainer.appendChild(fileInfo);
 
+            // Add date picker
+            const dateGroup = document.createElement('div');
+            dateGroup.className = 'form-group';
+            const dateLabel = document.createElement('label');
+            dateLabel.textContent = 'Date:';
+            const dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            dateInput.required = true;
+            dateInput.value = today;
 
+            dateGroup.appendChild(dateLabel);
+            dateGroup.appendChild(dateInput);
+            imageContainer.appendChild(dateGroup);
 
-// Add description field
-const descGroup = document.createElement('div');
-descGroup.className = 'form-group';
-const descLabel = document.createElement('label');
-descLabel.textContent = 'Description:';
-const descInput = document.createElement('textarea');
-descInput.required = true;
-descGroup.appendChild(descLabel);
-descGroup.appendChild(descInput);
-imageContainer.appendChild(descGroup);
+            // Add description field
+            const descGroup = document.createElement('div');
+            descGroup.className = 'form-group';
+            const descLabel = document.createElement('label');
+            descLabel.textContent = 'Description:';
+            const descInput = document.createElement('textarea');
+            descInput.required = true;
+            descGroup.appendChild(descLabel);
+            descGroup.appendChild(descInput);
+            imageContainer.appendChild(descGroup);
 
-previewGrid.appendChild(imageContainer);
-
+            previewGrid.appendChild(imageContainer);
         }
-    
+
         // Enable submit button if there are any images
         submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
-
-
     }
-    
+
     
     
 
@@ -154,18 +155,16 @@ previewGrid.appendChild(imageContainer);
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         submitButton.disabled = true;
-    
+
         try {
             const containers = document.querySelectorAll('.image-upload-container');
-
-            // Add this right after getting containers
-            console.log('Selected files:', photoInput.files);
             console.log('Number of containers:', containers.length);
-
+            console.log('Selected files:', selectedFiles);
 
             if (!containers.length) {
                 throw new Error('Please select at least one image');
             }
+
     
             // Get credentials once for all uploads
             const uploadPassword = document.getElementById('uploadPassword').value;
@@ -192,17 +191,14 @@ previewGrid.appendChild(imageContainer);
             // Collect all new entries
             let newEntries = [];
     
- // Process each image container
+// Process each image container
 for (const container of containers) {
     try {
         const fileInfo = container.querySelector('.file-info').textContent;
         const fileName = fileInfo.substring(0, fileInfo.indexOf(' ('));
-        
-        // Debug log
-        console.log('All files:', Array.from(photoInput.files).map(f => f.name));
         console.log('Looking for file:', fileName);
-        
-        const file = Array.from(photoInput.files).find(f => f.name === fileName);
+
+        const file = selectedFiles.get(fileName); // Get file from Map
         if (!file) {
             console.error(`File not found: ${fileName}`);
             continue;
@@ -249,8 +245,6 @@ for (const container of containers) {
 }
 
 console.log('Final entries:', newEntries);
-
-    
             // Get current photos.yml content
             const [owner, repo] = CONFIG.githubRepo.split('/');
             const photosYmlResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
