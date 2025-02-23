@@ -157,6 +157,12 @@ previewGrid.appendChild(imageContainer);
     
         try {
             const containers = document.querySelectorAll('.image-upload-container');
+
+            // Add this right after getting containers
+            console.log('Selected files:', photoInput.files);
+            console.log('Number of containers:', containers.length);
+
+
             if (!containers.length) {
                 throw new Error('Please select at least one image');
             }
@@ -186,42 +192,64 @@ previewGrid.appendChild(imageContainer);
             // Collect all new entries
             let newEntries = [];
     
-            // Process each image container
-            for (const container of containers) {
-                const fileInfo = container.querySelector('.file-info').textContent;
-                const fileName = fileInfo.substring(0, fileInfo.indexOf(' ('));
-                const file = Array.from(photoInput.files).find(f => f.name === fileName);
-                if (!file) continue;
-    
-                console.log(`Processing ${fileName}...`);
-    
-                const date = container.querySelector('input[type="date"]').value;
-                const description = container.querySelector('textarea').value;
-    
-                // Resize and upload image
-                const resizedBlob = await resizeImage(file);
-                
-                const uploadResult = await new Promise((resolve, reject) => {
-                    imagekit.upload({
-                        file: resizedBlob,
-                        fileName: fileName,
-                        token: authData.token,
-                        signature: authData.signature,
-                        expire: authData.expire,
-                        useUniqueFileName: false
-                    }, function(err, result) {
-                        if (err) reject(err);
-                        else resolve(result);
-                    });
-                });
-    
-                // Collect the entry
-                newEntries.push({
-                    date,
-                    fileName,
-                    description
-                });
-            }
+ // Process each image container
+for (const container of containers) {
+    try {
+        const fileInfo = container.querySelector('.file-info').textContent;
+        const fileName = fileInfo.substring(0, fileInfo.indexOf(' ('));
+        
+        // Debug log
+        console.log('All files:', Array.from(photoInput.files).map(f => f.name));
+        console.log('Looking for file:', fileName);
+        
+        const file = Array.from(photoInput.files).find(f => f.name === fileName);
+        if (!file) {
+            console.error(`File not found: ${fileName}`);
+            continue;
+        }
+
+        console.log(`Processing ${fileName}...`);
+
+        const date = container.querySelector('input[type="date"]').value;
+        const description = container.querySelector('textarea').value;
+
+        // Resize and upload image
+        const resizedBlob = await resizeImage(file);
+        console.log(`Uploading ${fileName} to ImageKit...`);
+        
+        const uploadResult = await new Promise((resolve, reject) => {
+            imagekit.upload({
+                file: resizedBlob,
+                fileName: fileName,
+                token: authData.token,
+                signature: authData.signature,
+                expire: authData.expire,
+                useUniqueFileName: false
+            }, function(err, result) {
+                if (err) {
+                    console.error(`Upload error for ${fileName}:`, err);
+                    reject(err);
+                } else {
+                    console.log(`Successfully uploaded ${fileName}`);
+                    resolve(result);
+                }
+            });
+        });
+
+        // Collect the entry
+        newEntries.push({
+            date,
+            fileName,
+            description
+        });
+        console.log(`Added ${fileName} to entries`);
+    } catch (error) {
+        console.error(`Error processing ${container.querySelector('.file-info').textContent}:`, error);
+    }
+}
+
+console.log('Final entries:', newEntries);
+
     
             // Get current photos.yml content
             const [owner, repo] = CONFIG.githubRepo.split('/');
