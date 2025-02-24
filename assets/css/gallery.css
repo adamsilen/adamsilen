@@ -164,9 +164,3 @@
     padding: 1rem;
   }
 }
-
-@media (max-width: 480px) {
-  .photo-item {
-    width: 100%; /* 1 column on very small screens */
-  }
-}
