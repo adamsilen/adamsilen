@@ -55,7 +55,7 @@ description:
   {% endfor %}
 </div>
 
-<div class="more-link"><a class="nav" href="/photos/">Mer fotat »</a></div>
+<div class="more-link"><a class="nav" href="/fotat/">Mer fotat »</a></div>
 
 <div id="lightbox" class="lightbox">
   <button class="close">&times;</button>
