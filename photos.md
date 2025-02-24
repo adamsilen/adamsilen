@@ -6,12 +6,12 @@ title: Fotat
   {% assign sorted_photos = site.data.photos | sort: 'date' | reverse %}
   {% for photo in sorted_photos offset:9 %}
 <div class="photo-item" 
-     data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
+     data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=q-60" 
      data-date="{{ photo.date | date: '%-d %B %Y' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december'}}"
      data-description="{{ photo.description }}">
   <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=bl-90,q-1" 
        class="preview-img" alt="">
-  <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}"
+  <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=q-60"
        class="main-img" alt="{{ photo.description }}" loading="lazy" decoding="async" data-src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-600,q-60">
 </div>
 
