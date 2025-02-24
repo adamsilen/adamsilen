@@ -40,7 +40,7 @@ description:
   <div class="grid-size-detector"></div>
   {% for photo in recent_photos limit: limit_photos %}
 <div class="photo-item" 
-     data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=pr-true" 
+     data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
      data-date="{{ photo.date | date: '%-d %B %Y' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december'}}"
      data-description="{{ photo.description }}">
   <!-- Blurry preview -->
@@ -49,7 +49,7 @@ description:
       alt="">
   <!-- Main image – starts without transformation in src; will be lazy-loaded -->
   <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
-       data-src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-400,h-400,q-90" 
+       data-src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-600,h-600,q-60" 
        class="main-img" alt="{{ photo.description }}" loading="lazy" decoding="async">
 </div>
 
