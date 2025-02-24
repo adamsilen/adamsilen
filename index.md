@@ -37,18 +37,17 @@ description:
 <div class="photo-grid recent">
   {% assign recent_photos = site.data.photos | sort: 'date' | reverse %}
   {% assign limit_photos = 9 %}
-  <div class="grid-size-detector"></div>
   {% for photo in recent_photos limit: limit_photos %}
 <div class="photo-item" 
-     data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
+     data-url="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=q-60" 
      data-date="{{ photo.date | date: '%-d %B %Y' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december'}}"
      data-description="{{ photo.description }}">
   <!-- Blurry preview -->
   <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=bl-90,q-1"
       class="preview-img" 
       alt="">
-  <!-- Main image – starts without transformation in src; will be lazy-loaded -->
-  <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}" 
+  
+  <img src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=q-60" 
        data-src="https://ik.imagekit.io/adamsilen/{{ photo.image }}?tr=w-600,q-60" 
        class="main-img" alt="{{ photo.description }}" loading="lazy" decoding="async">
 </div>
