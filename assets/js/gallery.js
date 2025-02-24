@@ -15,12 +15,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const fullUrl = photo.dataset.url.replace('?tr=pr-true', '');
     const previewUrl = photo.querySelector('.preview-img').src;
     
-    // Show preview image immediately
     previewImg.src = previewUrl;
     previewImg.style.opacity = '1';
     fullImg.style.opacity = '0';
     
-    // Load full image
     fullImg.src = fullUrl;
     fullImg.onload = function() {
       fullImg.style.opacity = '1';
@@ -32,19 +30,35 @@ document.addEventListener('DOMContentLoaded', function() {
     currentIndex = index;
   }
   
+  // Initialize Masonry
+  const grid = document.querySelector('.photo-grid');
+  const masonry = new Masonry(grid, {
+    itemSelector: '.photo-item',
+    columnWidth: '.photo-item',
+    gutter: 16,
+    percentPosition: true,
+    transitionDuration: 0
+  });
+
+  // Update layout after all images are loaded
+  imagesLoaded(grid).on('progress', function() {
+    masonry.layout();
+  });
+
+  // Bind click events after Masonry is initialized
   photos.forEach((photo, index) => {
-    photo.addEventListener('click', () => {
+    photo.addEventListener('click', (e) => {
+      e.preventDefault();
       showPhoto(index);
       lightbox.classList.add('active');
     });
   });
   
-  // Close lightbox
+  // Lightbox controls
   lightbox.querySelector('.close').addEventListener('click', () => {
     lightbox.classList.remove('active');
   });
   
-  // Navigation buttons
   lightbox.querySelector('.prev').addEventListener('click', (e) => {
     e.stopPropagation();
     showPhoto((currentIndex - 1 + photos.length) % photos.length);
@@ -55,14 +69,12 @@ document.addEventListener('DOMContentLoaded', function() {
     showPhoto((currentIndex + 1) % photos.length);
   });
   
-  // Close when clicking outside the image
   lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) {
       lightbox.classList.remove('active');
     }
   });
   
-  // Keyboard navigation
   document.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('active')) return;
     
