@@ -13,25 +13,6 @@ description:
   {% endif %}
 </ul>
 
-<h2>Skrivet</h2>
-<ul class="post-list">
-  {% for post in site.posts limit:2 %}
-    <li>
-        <span class="post-date">{{ post.date | date: "%-d %B %Y" | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december' }}</span>
-        <a class="post-list-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
-      {% if post.excerpt != post.content %}
-        <p class="excerpt">
-          {{ post.excerpt }}
-        </p>
-      {% endif %}
-    </li>
-  {% endfor %}
-</ul>
-
-<div class="more-link"><a class="nav" href="/skrivet/">Mer skrivet »</a></div>
-
----
-
 <h2>Fotat</h2>
 {% if site.data.photos %}
 <div class="photo-grid recent">
@@ -77,3 +58,22 @@ description:
 
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+
+---
+
+<h2>Skrivet</h2>
+<ul class="post-list">
+  {% for post in site.posts limit:2 %}
+    <li>
+        <span class="post-date">{{ post.date | date: "%-d %B %Y" | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december' }}</span>
+        <a class="post-list-title" href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      {% if post.excerpt != post.content %}
+        <p class="excerpt">
+          {{ post.excerpt }}
+        </p>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+
+<div class="more-link"><a class="nav" href="/skrivet/">Mer skrivet »</a></div>
