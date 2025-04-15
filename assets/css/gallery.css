@@ -53,7 +53,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 1);
   z-index: 1000;
   padding: 2rem;
   box-sizing: border-box;
@@ -61,7 +61,7 @@
 }
 
 .lightbox.active {
-  display: flex; 
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -91,8 +91,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;  
-  height: 100%; 
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   transform: scale(1.1);
 }
@@ -125,18 +125,54 @@
   right: 1rem;
 }
 
-.lightbox .prev {
-  left: 1rem;
-  top: 90%;
-  transform: translateY(-50%);
+/* Swipe Indicator Styles */
+.swipe-indicator {
+  position: absolute;
+  top: 50%;
+  color: rgba(255, 255, 255, 0.7); /* White with some transparency */
+  font-size: 2.5rem; /* Adjust size as needed */
+  font-weight: bold;
+  z-index: 1002; /* Above content, below close button if needed */
+  pointer-events: none; /* Make sure they don't block clicks/swipes */
+  opacity: 0; /* Hidden by default */
+  user-select: none; /* Prevent text selection */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge */
+  transform: translateY(-50%); /* Apply base transform */
 }
 
-.lightbox .next {
-  right: 1rem;
-  top: 90%;
-  transform: translateY(-50%);
+.swipe-indicator-left {
+  left: 1.5rem; /* Adjust spacing */
 }
 
+.swipe-indicator-right {
+  right: 1.5rem; /* Adjust spacing */
+}
+
+/* Animation Keyframes for Swipe Hint */
+@keyframes swipe-hint-left {
+  0% { opacity: 0; transform: translate(0, -50%); }
+  30%, 70% { opacity: 0.7; transform: translate(10px, -50%); } /* Move right slightly */
+  100% { opacity: 0; transform: translate(10px, -50%); }
+}
+
+@keyframes swipe-hint-right {
+  0% { opacity: 0; transform: translate(0, -50%); }
+  30%, 70% { opacity: 0.7; transform: translate(-10px, -50%); } /* Move left slightly */
+  100% { opacity: 0; transform: translate(-10px, -50%); }
+}
+
+/* Apply animation when hint class is present */
+.lightbox.show-swipe-hint .swipe-indicator-left {
+  animation: swipe-hint-left 1.8s ease-in-out forwards;
+}
+
+.lightbox.show-swipe-hint .swipe-indicator-right {
+  animation: swipe-hint-right 1.8s ease-in-out forwards;
+}
+
+/* Styles for smaller screens */
 @media (max-width: 768px) {
   .photo-item {
     width: calc(50% - 1rem); /* 2 columns on mobile */
@@ -148,6 +184,20 @@
 
   .lightbox button {
     font-size: 1.5rem;
+  }
+
+  /* Adjust close button position and appearance on small screens */
+  .lightbox .close {
+    top: 1.5rem;
+    right: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
   }
 
   .lightbox-content {
@@ -162,5 +212,16 @@
 
   .photo-info {
     padding: 1rem;
+  }
+
+  /* Adjust swipe indicator position and size on mobile */
+  .swipe-indicator {
+    font-size: 2rem;
+  }
+  .swipe-indicator-left {
+    left: 1rem;
+  }
+  .swipe-indicator-right {
+    right: 1rem;
   }
 }
