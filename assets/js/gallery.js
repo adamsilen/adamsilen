@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const lightbox = document.getElementById('lightbox');
   if (!lightbox) return;
 
-  // --- Add body element reference ---
+  const htmlElement = document.documentElement;
   const bodyElement = document.body;
 
   const lightboxContent = lightbox.querySelector('.lightbox-content');
@@ -10,91 +10,136 @@ document.addEventListener('DOMContentLoaded', function() {
   const fullImg = lightboxContent.querySelector('.full-img');
   const lightboxDate = lightbox.querySelector('.photo-date');
   const lightboxDescription = lightbox.querySelector('.photo-description');
+  const closeButton = lightbox.querySelector('.close');
+  const indicatorLeft = lightbox.querySelector('.swipe-indicator-left');
+  const indicatorRight = lightbox.querySelector('.swipe-indicator-right');
   const photos = document.querySelectorAll('.photo-item');
   let currentIndex = 0;
 
-  // Variables for swipe detection
   let touchStartX = 0;
   let touchStartY = 0;
   let touchEndX = 0;
   let touchEndY = 0;
-  const swipeThreshold = 50; // Minimum pixels to count as a swipe
+  const swipeThreshold = 50;
 
-  // Variable and check for swipe hint animation
-  let swipeHintTimeout;
+  let uiTimer = null;
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-  function showPhoto(index) {
+  function showUIElements() {
+    if (closeButton) {
+      closeButton.classList.remove('close-hidden');
+    }
+    if(indicatorLeft && indicatorRight) {
+      indicatorLeft.classList.add('indicators-visible');
+      indicatorRight.classList.add('indicators-visible');
+    }
+    if (uiTimer) {
+      clearTimeout(uiTimer);
+    }
+    uiTimer = setTimeout(hideUIElements, 2000);
+  }
+
+  function hideUIElements() {
+     if (closeButton) {
+        closeButton.classList.add('close-hidden');
+     }
+     if(indicatorLeft && indicatorRight) {
+        indicatorLeft.classList.remove('indicators-visible');
+        indicatorRight.classList.remove('indicators-visible');
+     }
+     if (uiTimer) {
+        clearTimeout(uiTimer);
+        uiTimer = null;
+     }
+  }
+
+  function showPhoto(index, isInitialLoad = false) {
     const photo = photos[index];
     if (!photo) return;
 
-    const fullUrl = photo.dataset.url;
-    const previewUrl = photo.querySelector('.preview-img').src;
+    const newFullUrl = photo.dataset.url;
+    const newPreviewUrl = photo.querySelector('.preview-img').src;
 
-    previewImg.src = previewUrl;
-    previewImg.style.opacity = '1';
-    fullImg.src = '';
-    fullImg.style.opacity = '0';
+    const needsFadeOut = !isInitialLoad && fullImg.style.opacity === '1' && fullImg.src;
 
-    const tempImg = new Image();
-    tempImg.onload = function() {
-      fullImg.src = fullUrl;
-      fullImg.style.opacity = '1';
-      previewImg.style.opacity = '0';
+    if (needsFadeOut) {
+        fullImg.style.opacity = '0';
+        if (previewImg.style.opacity === '1') {
+             previewImg.style.opacity = '0';
+             setTimeout(() => { previewImg.style.display = 'none'; }, 300);
+        }
     }
-    tempImg.onerror = function() {
-      console.error("Error loading image:", fullUrl);
-      previewImg.style.opacity = '1'; // Fallback to preview on error
-      fullImg.style.opacity = '0';
-    }
-    tempImg.src = fullUrl;
 
-    lightboxDate.textContent = photo.dataset.date;
-    lightboxDescription.textContent = photo.dataset.description;
+    setTimeout(() => {
+        lightboxDate.textContent = photo.dataset.date;
+        lightboxDescription.textContent = photo.dataset.description;
+
+        const tempImg = new Image();
+        tempImg.onload = function() {
+            previewImg.style.display = 'none';
+            previewImg.style.opacity = '0';
+            previewImg.src = newPreviewUrl;
+
+            fullImg.src = newFullUrl;
+            fullImg.style.opacity = '1';
+        }
+        tempImg.onerror = function() {
+            console.error("Error loading image:", newFullUrl);
+            fullImg.src = '';
+            fullImg.style.opacity = '0';
+            previewImg.src = newPreviewUrl;
+            previewImg.style.display = '';
+            previewImg.style.opacity = '1';
+        }
+        tempImg.src = newFullUrl;
+
+    }, needsFadeOut ? 300 : 0);
+
     currentIndex = index;
   }
 
   function showPrevImage() {
+    hideUIElements();
     const newIndex = (currentIndex - 1 + photos.length) % photos.length;
     showPhoto(newIndex);
   }
 
   function showNextImage() {
+    hideUIElements();
     const newIndex = (currentIndex + 1) % photos.length;
     showPhoto(newIndex);
   }
 
-  // --- Function to OPEN lightbox ---
   function openLightbox(index) {
-    showPhoto(index);
+    showPhoto(index, true);
     lightbox.classList.add('active');
-    bodyElement.style.overflow = 'hidden'; // Prevent body scroll
-
-    // --- Trigger Swipe Hint Animation on Touch Devices ---
-    if (isTouchDevice) {
-      if (swipeHintTimeout) { // Clear previous timeout if reopening quickly
-        clearTimeout(swipeHintTimeout);
-      }
-      lightbox.classList.add('show-swipe-hint');
-      swipeHintTimeout = setTimeout(() => {
-        lightbox.classList.remove('show-swipe-hint');
-        swipeHintTimeout = null; // Clear reference
-      }, 1800); // Duration matches CSS animation
-    }
+    htmlElement.style.overflow = 'hidden';
+    bodyElement.style.overflow = 'hidden';
+    showUIElements();
   }
 
-  // --- Function to CLOSE lightbox and clean up swipe hint ---
   function closeLightbox() {
     lightbox.classList.remove('active');
-    bodyElement.style.overflow = ''; // Restore body scroll
-    if (swipeHintTimeout) {
-      clearTimeout(swipeHintTimeout);
-      swipeHintTimeout = null;
+    hideUIElements();
+    if (uiTimer) {
+        clearTimeout(uiTimer);
+        uiTimer = null;
     }
-    lightbox.classList.remove('show-swipe-hint'); // Ensure class is removed
+
+    setTimeout(() => {
+        if (!lightbox.classList.contains('active')) {
+            htmlElement.style.overflow = '';
+            bodyElement.style.overflow = '';
+            fullImg.src = '';
+            previewImg.src = '';
+            fullImg.style.opacity = '0';
+            previewImg.style.opacity = '0';
+            previewImg.style.display = 'none';
+        }
+    }, 300);
   }
 
-  // --- Masonry Initialization ---
+
   const grid = document.querySelector('.photo-grid');
   if (grid && typeof Masonry !== 'undefined') {
     const masonry = new Masonry(grid, {
@@ -111,117 +156,134 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // --- Bind click events to grid items ---
   photos.forEach((photo, index) => {
     photo.addEventListener('click', (e) => {
       e.preventDefault();
-      openLightbox(index); // Use openLightbox function
+      openLightbox(index);
     });
   });
 
-  // --- Lightbox controls ---
-
-  // Close button
-  const closeButton = lightbox.querySelector('.close');
   if (closeButton) {
-    closeButton.addEventListener('click', closeLightbox); // Use shared close function
+    closeButton.addEventListener('click', closeLightbox);
   }
 
-  // --- Click Listener for Left/Right Navigation ---
   if (lightboxContent) {
     lightboxContent.addEventListener('click', function(event) {
-      // Ensure click is directly on content area or images, not info/buttons
-      if (event.target === lightboxContent || event.target === fullImg || event.target === previewImg) {
-        const rect = lightboxContent.getBoundingClientRect();
-        const clickX = event.clientX - rect.left;
-        if (clickX < rect.width / 2) {
-          showPrevImage();
-        } else {
-          showNextImage();
-        }
+      if (event.target === closeButton || closeButton?.contains(event.target)) {
+          return;
+      }
+
+      // Check if touch events already handled navigation (to prevent double nav/flash)
+       if (event.detail === 0) { // detail is often 0 for events triggered programmatically or after touch
+          // Potentially triggered after touchend handled navigation/UI show.
+          // Decide if we need to do anything here. Might be safe to just return.
+          // Let's try returning to see if it fixes the flash without breaking clicks.
+          // return;
+          // If returning breaks normal clicks, we might need a more robust flag system.
+      }
+
+
+      const rect = lightboxContent.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const clickZoneWidth = rect.width;
+
+      const leftZoneEnd = clickZoneWidth * 0.30;
+      const rightZoneStart = clickZoneWidth * 0.70;
+
+      if (clickX < leftZoneEnd) {
+        showPrevImage();
+      } else if (clickX > rightZoneStart) {
+        showNextImage();
+      } else {
+        showUIElements();
       }
     });
 
-    // --- Touch Event Listeners for Swipe ---
     lightboxContent.addEventListener('touchstart', function(event) {
-       if (event.target === lightboxContent || event.target === fullImg || event.target === previewImg) {
+       if (event.target === fullImg || event.target === previewImg) {
         touchStartX = event.changedTouches[0].screenX;
         touchStartY = event.changedTouches[0].screenY;
-      } else {
-          touchStartX = 0; // Ignore swipe if starting on info/buttons
-          touchStartY = 0;
-      }
+       } else {
+           touchStartX = 0;
+           touchStartY = 0;
+       }
     }, { passive: true });
 
     lightboxContent.addEventListener('touchend', function(event) {
-      if (touchStartX === 0) return; // Only process if swipe started on valid area
+      if (touchStartX === 0) return;
+      if (previewImg.style.opacity === '1') {
+        touchStartX = 0;
+        return;
+      }
 
       touchEndX = event.changedTouches[0].screenX;
       touchEndY = event.changedTouches[0].screenY;
-      handleSwipe(); // Call the updated handler
-    }, { passive: true });
 
-  } // End if(lightboxContent)
+      // Store end coordinates before resetting, for tap zone check
+      const finalTouchX = touchEndX;
+      const finalTouchY = touchEndY; // Though Y is not used here
 
-  // --- MODIFIED handleSwipe function ---
-  function handleSwipe() {
-      const deltaX = touchEndX - touchStartX;
-      const deltaY = touchEndY - touchStartY;
+      handleSwipe(finalTouchX); // Pass the final X coordinate
 
-      // Check if horizontal swipe is dominant and meets threshold
-      if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
-          if (deltaX < 0) { // Swiped Left (Next)
-              showNextImage();
-          } else { // Swiped Right (Prev)
-              showPrevImage();
-          }
-      }
-      // Else, check if vertical swipe is dominant and meets threshold
-      else if (Math.abs(deltaY) > swipeThreshold && Math.abs(deltaY) > Math.abs(deltaX)) {
-          if (deltaY < 0) { // Swiped Up (Next) - Negative deltaY means moving up
-              showNextImage();
-          } else { // Swiped Down (Prev) - Positive deltaY means moving down
-              showPrevImage();
-          }
-      }
-
-      // Reset touch coordinates regardless of swipe action
+       // Reset touch coordinates AFTER passing to handleSwipe
       touchStartX = 0;
       touchStartY = 0;
       touchEndX = 0;
       touchEndY = 0;
+    }, { passive: true });
+
   }
-  // --- END MODIFIED handleSwipe function ---
 
-  // Click outside content to close
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-      closeLightbox(); // Use shared close function
-    }
-  });
+  function handleSwipe(finalX) { // Receive finalX coordinate
+      const deltaX = touchEndX - touchStartX; // Use class-level variables for calculation
+      const deltaY = touchEndY - touchStartY;
 
-  // Keyboard navigation
+      if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
+          if (deltaX < 0) {
+              showNextImage();
+          } else {
+              showPrevImage();
+          }
+      } else if (Math.abs(deltaX) < swipeThreshold && Math.abs(deltaY) < swipeThreshold) {
+           // Treat as a TAP if movement is below threshold for both axes
+
+           // Check tap location using finalX relative to lightboxContent
+            const rect = lightboxContent.getBoundingClientRect();
+            const tapXRelative = finalX - rect.left;
+            const clickZoneWidth = rect.width;
+            const leftZoneEnd = clickZoneWidth * 0.30;
+            const rightZoneStart = clickZoneWidth * 0.70;
+
+            if (tapXRelative >= leftZoneEnd && tapXRelative <= rightZoneStart) {
+                // TAP was in the CENTER zone
+                showUIElements();
+            }
+            // If tap was in SIDE zones, do nothing here - let the click listener handle it.
+      }
+       // Resetting touch coordinates moved to touchend listener
+  }
+
   document.addEventListener('keydown', (e) => {
     if (!lightbox.classList.contains('active')) return;
+    if (previewImg.style.opacity === '1' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) return;
+
     switch(e.key) {
       case 'Escape':
-        closeLightbox(); // Use shared close function
+        closeLightbox();
         break;
-      // Add Up/Down arrow keys to match swipe directions
       case 'ArrowLeft':
-      case 'ArrowUp': // Down arrow = Previous
+      case 'ArrowUp':
         showPrevImage();
         break;
       case 'ArrowRight':
-      case 'ArrowDown': // Up arrow = Next
+      case 'ArrowDown':
         showNextImage();
         break;
     }
   });
 
-}); // End DOMContentLoaded for Lightbox
+});
 
-// --- Progressive lazy loading (Separate DOMContentLoaded for clarity) ---
 document.addEventListener('DOMContentLoaded', function() {
   const mainImages = document.querySelectorAll('.photo-item .main-img');
 
@@ -237,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         tempLoader.onerror = () => console.error("Failed to load lazy image:", highRes);
         tempLoader.src = highRes;
-    } else if (img.complete && img.naturalHeight > 0) { // Handle already cached images
+    } else if (img.complete && img.naturalHeight > 0) {
         img.classList.add('loaded');
         const preview = img.parentElement.querySelector('.preview-img');
         if (preview) preview.style.opacity = 0;
@@ -258,5 +320,4 @@ document.addEventListener('DOMContentLoaded', function() {
       console.warn("IntersectionObserver not supported, loading all images.");
       mainImages.forEach(img => loadImage(img));
   }
-}); // End DOMContentLoaded for Lazy Loading
-
+});

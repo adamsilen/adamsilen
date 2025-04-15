@@ -78,11 +78,9 @@ HOME PAGE RECENT GALLERY -->
 </div>
 
 <div id="lightbox" class="lightbox">
-  <button class="close">&times;</button>
-  <!-- Swipe Indicators -->
+  <button class="close">Stäng</button>
   <div class="swipe-indicator swipe-indicator-left">&lt;</div>
   <div class="swipe-indicator swipe-indicator-right">&gt;</div>
-  <!-- End Swipe Indicators -->
   <div class="lightbox-content">
     <img class="preview-img" src="" alt="">
     <img class="full-img" src="" alt="">

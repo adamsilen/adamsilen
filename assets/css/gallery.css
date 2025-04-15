@@ -45,9 +45,7 @@
   transform: scale(1.05);
 }
 
-/* Lightbox styles */
 .lightbox {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -57,14 +55,20 @@
   z-index: 1000;
   padding: 2rem;
   box-sizing: border-box;
-  overflow-y: auto;
-}
-
-.lightbox.active {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .lightbox-content {
@@ -72,7 +76,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 90vw;
+  width: calc(100% - 4rem);
+  max-width: 1200px;
   margin: auto;
 }
 
@@ -102,6 +107,7 @@
   text-align: center;
   width: 100%;
   padding-top: 1rem;
+  flex-shrink: 0;
 }
 
 .photo-date {
@@ -121,100 +127,103 @@
 }
 
 .lightbox .close {
-  top: 1rem;
-  right: 1rem;
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rem;
+  height: 2rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--text-color);
+  border: none;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  font-family: var(--body-font);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  z-index: 1010;
+  padding: 0;
+  text-shadow: none;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  pointer-events: auto;
 }
 
-/* Swipe Indicator Styles */
+.lightbox .close.close-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+.lightbox .close:hover {
+   background-color: rgba(0, 0, 0, 0.9);
+}
+
 .swipe-indicator {
   position: absolute;
   top: 50%;
-  color: rgba(255, 255, 255, 0.7); /* White with some transparency */
-  font-size: 2.5rem; /* Adjust size as needed */
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 2.5rem;
   font-weight: bold;
-  z-index: 1002; /* Above content, below close button if needed */
-  pointer-events: none; /* Make sure they don't block clicks/swipes */
-  opacity: 0; /* Hidden by default */
-  user-select: none; /* Prevent text selection */
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE/Edge */
-  transform: translateY(-50%); /* Apply base transform */
+  z-index: 1002;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  transform: translateY(-50%);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
+.lightbox .indicators-visible {
+  opacity: 0.7;
+}
+
+
 .swipe-indicator-left {
-  left: 1.5rem; /* Adjust spacing */
+  left: 1.5rem;
 }
 
 .swipe-indicator-right {
-  right: 1.5rem; /* Adjust spacing */
+  right: 1.5rem;
 }
 
-/* Animation Keyframes for Swipe Hint */
-@keyframes swipe-hint-left {
-  0% { opacity: 0; transform: translate(0, -50%); }
-  30%, 70% { opacity: 0.7; transform: translate(10px, -50%); } /* Move right slightly */
-  100% { opacity: 0; transform: translate(10px, -50%); }
-}
-
-@keyframes swipe-hint-right {
-  0% { opacity: 0; transform: translate(0, -50%); }
-  30%, 70% { opacity: 0.7; transform: translate(-10px, -50%); } /* Move left slightly */
-  100% { opacity: 0; transform: translate(-10px, -50%); }
-}
-
-/* Apply animation when hint class is present */
-.lightbox.show-swipe-hint .swipe-indicator-left {
-  animation: swipe-hint-left 1.8s ease-in-out forwards;
-}
-
-.lightbox.show-swipe-hint .swipe-indicator-right {
-  animation: swipe-hint-right 1.8s ease-in-out forwards;
-}
-
-/* Styles for smaller screens */
 @media (max-width: 768px) {
   .photo-item {
-    width: calc(50% - 1rem); /* 2 columns on mobile */
+    width: calc(50% - 1rem);
   }
 
   .lightbox {
     padding: 0;
   }
 
-  .lightbox button {
-    font-size: 1.5rem;
-  }
-
-  /* Adjust close button position and appearance on small screens */
-  .lightbox .close {
-    top: 1.5rem;
-    right: 1.5rem;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 50%;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
-    align-items: center;
+  .lightbox-content {
+    width: 100%;
+    margin: 0;
+    height: 100%;
     justify-content: center;
     padding: 0;
-  }
-
-  .lightbox-content {
-    width: 100vw;
-    margin: 0;
+    box-sizing: border-box;
   }
 
   .lightbox-content .preview-img,
   .lightbox-content .full-img {
-    max-height: 70vh;
+     max-height: 85vh;
+     max-width: 100%;
   }
 
   .photo-info {
-    padding: 1rem;
+    position: static;
+    padding: 1rem 0 0.5rem 0;
+    width: 100%;
+    background: none;
+    margin-top: 0.5rem;
   }
 
-  /* Adjust swipe indicator position and size on mobile */
   .swipe-indicator {
     font-size: 2rem;
   }
@@ -224,4 +233,7 @@
   .swipe-indicator-right {
     right: 1rem;
   }
+   .lightbox .indicators-visible {
+    opacity: 0.7;
+   }
 }
