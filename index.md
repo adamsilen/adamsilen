@@ -82,12 +82,16 @@ HOME PAGE RECENT GALLERY -->
   <div class="swipe-indicator swipe-indicator-left">&lt;</div>
   <div class="swipe-indicator swipe-indicator-right">&gt;</div>
   <div class="lightbox-content">
+    
+  <div class="lightbox-image-wrapper">
     <img class="preview-img" src="" alt="">
     <img class="full-img" src="" alt="">
-    <div class="photo-info">
-      <div class="photo-date"></div>
-      <p class="photo-description"></p>
-    </div>
+  </div>
+    
+  <div class="photo-info">
+    <div class="photo-date"></div>
+    <p class="photo-description"></p>
+  </div>
   </div>
 </div>
 

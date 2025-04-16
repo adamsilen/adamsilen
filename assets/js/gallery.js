@@ -8,10 +8,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const bodyElement = document.body;
 
     const lightboxContent = lightbox.querySelector('.lightbox-content');
-    const previewImg = lightboxContent.querySelector('.preview-img');
-    const fullImg = lightboxContent.querySelector('.full-img');
-    const lightboxDate = lightbox.querySelector('.photo-date');
-    const lightboxDescription = lightbox.querySelector('.photo-description');
+    const imageWrapper = lightbox.querySelector('.lightbox-image-wrapper');
+    const photoInfo = lightbox.querySelector('.photo-info');
+    const previewImg = imageWrapper.querySelector('.preview-img');
+    const fullImg = imageWrapper.querySelector('.full-img');
+    const lightboxDate = photoInfo.querySelector('.photo-date');
+    const lightboxDescription = photoInfo.querySelector('.photo-description');
     const closeButton = lightbox.querySelector('.close');
     const indicatorLeft = lightbox.querySelector('.swipe-indicator-left');
     const indicatorRight = lightbox.querySelector('.swipe-indicator-right');
@@ -79,50 +81,41 @@ document.addEventListener('DOMContentLoaded', function() {
         lightboxDate.textContent = photo.dataset.date;
         lightboxDescription.textContent = photo.dataset.description;
 
-        const needsFadeOut = !isInitialLoad && fullImg.style.opacity === '1' && fullImg.src;
+        const lightboxStyles = window.getComputedStyle(lightbox);
+        const lightboxPaddingY = parseFloat(lightboxStyles.paddingTop) + parseFloat(lightboxStyles.paddingBottom);
+        const photoInfoHeight = (photoInfo && window.getComputedStyle(photoInfo).display !== 'none') ? photoInfo.offsetHeight : 0;
+        const buffer = 20;
+        const viewportMaxHeight = window.innerHeight - lightboxPaddingY - photoInfoHeight - buffer;
+        const finalMaxHeight = Math.min(viewportMaxHeight, 800);
 
-        if (needsFadeOut) {
-            fullImg.style.opacity = '0';
-            if (previewImg && previewImg.style.opacity === '1') {
-                previewImg.style.opacity = '0';
-                setTimeout(() => { if (previewImg) previewImg.style.display = 'none'; }, 300);
-            }
+        if (imageWrapper) {
+             imageWrapper.style.height = `${finalMaxHeight}px`;
         }
 
-        setTimeout(() => {
+        if (newPreviewUrl && previewImg) {
+            previewImg.src = newPreviewUrl;
+            previewImg.style.opacity = '1';
+        } else if (previewImg) {
+            previewImg.style.opacity = '0';
+        }
+        fullImg.style.opacity = '1';
+        fullImg.src = '';
 
-            if (newPreviewUrl && previewImg) {
-                previewImg.src = newPreviewUrl;
-                previewImg.style.display = '';
-                previewImg.style.opacity = '1';
-            } else if (previewImg) {
-                previewImg.style.display = 'none';
+        const tempImg = new Image();
+        tempImg.onload = function() {
+            fullImg.src = newFullUrl;
+            if (previewImg) {
                 previewImg.style.opacity = '0';
             }
-
-            const tempImg = new Image();
-            tempImg.onload = function() {
-                if (previewImg) {
-                    previewImg.style.opacity = '0';
-                    // setTimeout(() => { if (previewImg) previewImg.style.display = 'none'; }, 300); // Optional hide after fade
-                }
-                fullImg.src = newFullUrl;
-                fullImg.style.opacity = '1';
-
-                triggerPreloadNext(index);
+            triggerPreloadNext(index);
+        }
+        tempImg.onerror = function() {
+            console.error("Error loading image:", newFullUrl);
+            if (previewImg) {
+                previewImg.style.opacity = '1';
             }
-            tempImg.onerror = function() {
-                console.error("Error loading image:", newFullUrl);
-                fullImg.src = '';
-                fullImg.style.opacity = '0';
-                if (previewImg) {
-                    previewImg.style.display = '';
-                    previewImg.style.opacity = '1';
-                }
-            }
-            tempImg.src = newFullUrl;
-
-        }, needsFadeOut ? 300 : (isInitialLoad ? 0 : 50));
+        }
+        tempImg.src = newFullUrl;
 
         currentIndex = index;
     }
@@ -142,8 +135,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openLightbox(index) {
         currentIndex = index;
-        showPhoto(index, true);
+        if (imageWrapper) imageWrapper.style.height = 'auto';
         lightbox.classList.add('active');
+        setTimeout(() => {
+            showPhoto(index, true);
+        }, 10);
         htmlElement.style.overflow = 'hidden';
         bodyElement.style.overflow = 'hidden';
         showUIElements();
@@ -156,18 +152,16 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(uiTimer);
             uiTimer = null;
         }
-
         setTimeout(() => {
             if (!lightbox.classList.contains('active')) {
                 htmlElement.style.overflow = '';
                 bodyElement.style.overflow = '';
                 fullImg.src = '';
-                if (previewImg) previewImg.src = '';
-                fullImg.style.opacity = '0';
                 if (previewImg) {
-                    previewImg.style.opacity = '0';
-                    previewImg.style.display = 'none';
+                    previewImg.src = '';
+                    previewImg.style.opacity = '1';
                 }
+                if (imageWrapper) imageWrapper.style.height = 'auto';
             }
         }, 300);
     }
@@ -233,15 +227,14 @@ document.addEventListener('DOMContentLoaded', function() {
         closeButton.addEventListener('click', closeLightbox);
     }
 
-    if (lightboxContent) {
-        lightboxContent.addEventListener('click', function(event) {
+    if (lightbox) {
+        lightbox.addEventListener('click', function(event) {
             if (event.target === closeButton || closeButton?.contains(event.target)) {
                 return;
             }
 
             const clickX = event.clientX;
             const windowWidth = window.innerWidth;
-
             const leftZoneEnd = windowWidth * 0.30;
             const rightZoneStart = windowWidth * 0.70;
 
@@ -250,16 +243,17 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (clickX > rightZoneStart) {
                 showNextImage();
             } else {
-                showUIElements();
+                // Click is in CENTER zone (30% to 70%)
+                showUIElements(); // Always toggle UI on center click
             }
         });
 
-        lightboxContent.addEventListener('touchstart', function(event) {
+        lightbox.addEventListener('touchstart', function(event) {
             touchStartX = event.changedTouches[0].screenX;
             touchStartY = event.changedTouches[0].screenY;
         }, { passive: true });
 
-        lightboxContent.addEventListener('touchend', function(event) {
+        lightbox.addEventListener('touchend', function(event) {
             if (touchStartX === 0) return;
 
             touchEndX = event.changedTouches[0].screenX;
@@ -280,8 +274,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
         }, { passive: true });
-
     }
+
 
     document.addEventListener('keydown', (e) => {
         if (!lightbox.classList.contains('active')) return;

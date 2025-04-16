@@ -55,15 +55,14 @@
   height: 100%;
   background: rgba(0, 0, 0, 1);
   z-index: 1000;
-  padding: 2rem;
+  padding: 1rem; /* Reduce padding slightly maybe */
   box-sizing: border-box;
-  overflow-y: hidden;
+  overflow-y: auto; /* Allow vertical scroll if content overflows */
   overflow-x: hidden;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
-  display: flex;
-  flex-direction: column;
+  display: flex; /* Use flex for centering */
   align-items: center;
   justify-content: center;
 }
@@ -73,42 +72,70 @@
   pointer-events: auto;
 }
 
+/* Main content area */
 .lightbox-content {
-  position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: calc(100% - 4rem);
-  margin: auto;
+  flex-direction: column; /* Stack image wrapper and text vertically */
+  align-items: center; /* Center items horizontally */
+  width: 100%;
+  max-width: 800px; /* Max width for the whole content block */
+  margin: auto; /* Center block */
+  padding-bottom: 1rem; /* Space at bottom */
 }
 
-.lightbox-content .preview-img,
-.lightbox-content .full-img {
-  max-width: 100%; 
-  max-height: 80vh; 
-  max-height: 800px;
-  max-width: 800px;
+/* Wrapper for images - will have height set by JS */
+.lightbox-image-wrapper {
+  position: relative; /* For positioning preview */
+  width: 100%; /* Take width of content area */
+  /* Height will be set dynamically by JS */
+  /* max-height constraints removed, handled by JS calc */
+  display: flex; /* Center image inside */
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Hide potential overflow during transitions */
+}
+
+/* Images within the wrapper */
+.lightbox-image-wrapper .preview-img,
+.lightbox-image-wrapper .full-img {
+  display: block; /* Ensure block display */
+  max-width: 100%;  /* Fit width of wrapper */
+  max-height: 100%; /* Fit height of wrapper (set by JS) */
   width: auto;
   height: auto;
   object-fit: contain;
   transition: opacity 0.3s ease;
 }
 
-.lightbox-content .preview-img {
-  filter: blur(10px);
+/* Preview image positioned absolutely ON TOP */
+.lightbox-image-wrapper .preview-img {
   position: absolute;
   top: 0;
+  left: 0;
+  /* Width/Height 100% ensures it covers the wrapper */
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  filter: blur(10px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 1;
 }
 
+/* Full image positioned statically UNDER preview */
+.lightbox-image-wrapper .full-img {
+  position: relative; /* Keep in flow */
+  z-index: 0; /* Behind preview initially */
+  opacity: 1; /* Start fully opaque but hidden by preview */
+}
+
+/* Text area below image */
 .photo-info {
   color: white;
   text-align: center;
-  width: 100%;
-  padding-top: 1rem;
-  flex-shrink: 0;
+  width: 100%; /* Match content width */
+  padding-top: 0.75rem; /* Space above text */
+  flex-shrink: 0; /* Prevent shrinking */
+  /* Remove absolute positioning */
 }
 
 .photo-date {
@@ -116,6 +143,7 @@
   opacity: 0.8;
 }
 
+/* --- Keep other styles (buttons, indicators) --- */
 .lightbox button {
   position: absolute;
   background: none;
@@ -199,41 +227,28 @@
   }
 
   .lightbox {
-    padding: 0;
+    padding: 0rem;
   }
 
   .lightbox-content {
-    width: 100%;
-    margin: 0;
-    height: 100%;
-    justify-content: center;
-    padding: 0;
-    box-sizing: border-box;
-    max-width: none;
-  }
-
-  .lightbox-content .preview-img,
-  .lightbox-content .full-img {
-     max-height: 85vh;
-     max-width: 100%;
+    max-width: none; 
+    padding-bottom: 0.5rem;
   }
 
   .photo-info {
-    position: static;
-    padding: 1rem 0 0.5rem 0;
-    width: 100%;
-    background: none;
-    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    width: calc(100% - 1rem);
+    margin: 0 auto;
   }
 
   .swipe-indicator {
     font-size: 2rem;
   }
   .swipe-indicator-left {
-    left: 1rem;
+    left: 0.5rem;
   }
   .swipe-indicator-right {
-    right: 1rem;
+    right: 0.5rem;
   }
    .lightbox .indicators-visible {
     opacity: 0.7;
