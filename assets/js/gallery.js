@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (imageWrapper) imageWrapper.style.height = 'auto';
         lightbox.classList.add('active');
         htmlElement.style.overflow = 'hidden';
-        bodyElement.style.overflow = 'hidden';
+        bodyElement.classList.add('lightbox-open');
         setTimeout(() => {
             showPhoto(index, true);
         }, 10);
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
             uiTimer = null;
         }
         htmlElement.style.overflow = '';
-        bodyElement.style.overflow = '';
+        bodyElement.classList.remove('lightbox-open');
 
         setTimeout(() => {
             if (!lightbox.classList.contains('active')) {
