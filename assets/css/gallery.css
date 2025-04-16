@@ -58,7 +58,7 @@
   padding: 1rem;
   box-sizing: border-box;
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Already here, good */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -80,6 +80,7 @@
   max-width: 800px;
   margin: auto;
   padding-bottom: 1rem;
+  box-sizing: border-box; /* Ensure padding is included in width */
 }
 
 .lightbox-image-wrapper {
@@ -89,20 +90,21 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  background-color: rgba(0, 0, 0, 1);
+  /* background-color: rgba(0, 0, 0, 1); */ /* REMOVE THIS */
 }
 
+/* Base styles for images in wrapper */
 .lightbox-image-wrapper .preview-img,
 .lightbox-image-wrapper .full-img {
   display: block;
   max-width: 100%;
-  max-height: 100%;
+  max-height: 100%; /* Respect wrapper height */
   width: auto;
   height: auto;
-  object-fit: contain;
   transition: opacity 0.3s ease;
 }
 
+/* Preview specific styles */
 .lightbox-image-wrapper .preview-img {
   position: absolute;
   top: 0;
@@ -110,15 +112,19 @@
   width: 100%;
   height: 100%;
   filter: blur(10px);
+  object-fit: cover; /* REVERT to cover */
   pointer-events: none;
   z-index: 1;
   opacity: 1;
+  transform: translateZ(0); /* Force GPU layer */
 }
 
+/* Full image specific styles */
 .lightbox-image-wrapper .full-img {
-  position: relative;
+  position: relative; /* Keep static positioning */
+  object-fit: contain; /* REVERT to contain */
   z-index: 0;
-  opacity: 1;
+  opacity: 1; /* Keep opaque, preview fades out */
 }
 
 .photo-info {
@@ -127,12 +133,15 @@
   width: 100%;
   padding-top: 0.75rem;
   flex-shrink: 0;
+  box-sizing: border-box; /* Ensure padding is included */
 }
 
 .photo-date {
   font-size: 0.9rem;
   opacity: 0.8;
 }
+
+/* ... (Rest of styles: buttons, indicators, media queries remain the same) ... */
 
 .lightbox button {
   position: absolute;

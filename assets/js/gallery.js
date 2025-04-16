@@ -137,11 +137,11 @@ document.addEventListener('DOMContentLoaded', function() {
         currentIndex = index;
         if (imageWrapper) imageWrapper.style.height = 'auto';
         lightbox.classList.add('active');
+        htmlElement.style.overflow = 'hidden';
+        bodyElement.style.overflow = 'hidden';
         setTimeout(() => {
             showPhoto(index, true);
         }, 10);
-        htmlElement.style.overflow = 'hidden';
-        bodyElement.style.overflow = 'hidden';
         showUIElements();
     }
 
@@ -152,10 +152,11 @@ document.addEventListener('DOMContentLoaded', function() {
             clearTimeout(uiTimer);
             uiTimer = null;
         }
+        htmlElement.style.overflow = '';
+        bodyElement.style.overflow = '';
+
         setTimeout(() => {
             if (!lightbox.classList.contains('active')) {
-                htmlElement.style.overflow = '';
-                bodyElement.style.overflow = '';
                 fullImg.src = '';
                 if (previewImg) {
                     previewImg.src = '';
@@ -243,8 +244,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (clickX > rightZoneStart) {
                 showNextImage();
             } else {
-                // Click is in CENTER zone (30% to 70%)
-                showUIElements(); // Always toggle UI on center click
+                showUIElements();
             }
         });
 
@@ -331,4 +331,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-});
+}); // End DOMContentLoaded
