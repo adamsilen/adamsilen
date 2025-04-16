@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const htmlElement = document.documentElement;
     const bodyElement = document.body;
 
-    const lightboxContent = lightbox.querySelector('.lightbox-content');
+    // Lightbox elements
     const imageWrapper = lightbox.querySelector('.lightbox-image-wrapper');
     const photoInfo = lightbox.querySelector('.photo-info');
     const previewImg = imageWrapper.querySelector('.preview-img');
@@ -16,41 +16,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const lightboxDescription = photoInfo.querySelector('.photo-description');
     const indicatorLeft = lightbox.querySelector('.swipe-indicator-left');
     const indicatorRight = lightbox.querySelector('.swipe-indicator-right');
+
     const photos = document.querySelectorAll('.photo-item');
     let currentIndex = 0;
 
+    // Touch/Swipe handling variables
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
-    const swipeThreshold = 50;
+    const swipeThreshold = 50; // Min distance for a swipe
+    let isSwiping = false; // Flag to track if a swipe action occurred
 
+    // UI Timer
     let uiTimer = null;
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+    // --- Image Preloading ---
     function preloadImage(url) {
         if (!url) return;
         const img = new Image();
         img.src = url;
     }
 
-    function triggerPreloadNext(currentIndex) {
-        const nextIndex = (currentIndex + 1) % photos.length;
+    function triggerPreloadNext(index) {
+        const nextIndex = (index + 1) % photos.length;
         const nextPhoto = photos[nextIndex];
         if (nextPhoto) {
             preloadImage(nextPhoto.dataset.url);
         }
     }
 
+    // --- UI Visibility Control ---
     function showUIElements() {
         if (indicatorLeft && indicatorRight) {
             indicatorLeft.classList.add('indicators-visible');
             indicatorRight.classList.add('indicators-visible');
         }
-        if (uiTimer) {
-            clearTimeout(uiTimer);
-        }
-        uiTimer = setTimeout(hideUIElements, 2000);
+        if (uiTimer) clearTimeout(uiTimer);
+        // Hide indicators after a short delay
+        uiTimer = setTimeout(hideUIElements, 1500); // Reduced time
     }
 
     function hideUIElements() {
@@ -64,163 +68,127 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function showPhoto(index) {
+    // --- Displaying Photos ---
+    function showPhoto(index, isOpening = false) {
         const photo = photos[index];
         if (!photo) return;
 
         const newFullUrl = photo.dataset.url;
         const newPreviewUrl = photo.querySelector('.preview-img')?.src;
 
+        // Update photo metadata
         lightboxDate.textContent = photo.dataset.date;
         lightboxDescription.textContent = photo.dataset.description;
 
+        // Calculate max height for the image wrapper dynamically
         const lightboxStyles = window.getComputedStyle(lightbox);
         const lightboxPaddingY = parseFloat(lightboxStyles.paddingTop) + parseFloat(lightboxStyles.paddingBottom);
         const photoInfoHeight = (photoInfo && window.getComputedStyle(photoInfo).display !== 'none') ? photoInfo.offsetHeight : 0;
-        const buffer = 20; // Extra vertical space buffer
+        const buffer = 20; // Vertical buffer space
         const viewportMaxHeight = window.innerHeight - lightboxPaddingY - photoInfoHeight - buffer;
-        const finalMaxHeight = Math.min(viewportMaxHeight, 800); // Cap max height if needed
+        // Cap max height (adjust 800 if needed)
+        const finalMaxHeight = Math.max(100, Math.min(viewportMaxHeight, 800)); // Ensure min height
 
         if (imageWrapper) {
-             imageWrapper.style.height = `${finalMaxHeight}px`;
+            imageWrapper.style.height = `${finalMaxHeight}px`;
         }
 
-        // Start fading out current full image
-        fullImg.style.opacity = '0';
+        // --- Transition Logic ---
+        // 1. Fade out the current full image (if not the initial opening)
+        if (!isOpening) {
+            fullImg.style.opacity = '0';
+        }
 
-        // Set and fade in new preview image
+        // 2. Set preview image src and fade it in immediately (provides quick feedback)
         if (newPreviewUrl && previewImg) {
             previewImg.src = newPreviewUrl;
-            previewImg.style.opacity = '1';
+            requestAnimationFrame(() => {
+                previewImg.style.opacity = '1';
+            });
         } else if (previewImg) {
-            previewImg.style.opacity = '0'; // Hide preview if none exists
+            previewImg.style.opacity = '0'; // Hide if no preview available
         }
 
-        // Clear full image src immediately to prevent flash of old image during load/fade
+        // 3. Clear full image src to prevent flash of old image during load
         fullImg.src = '';
+        if(isOpening) fullImg.style.opacity = '0'; // Ensure opacity is 0 when opening
 
+
+        // 4. Load the new full image in the background
         const tempImg = new Image();
         tempImg.onload = function() {
             fullImg.src = newFullUrl;
-            // Use requestAnimationFrame for smoother transition start
+            // 5. Once loaded, schedule the fade-in of full & fade-out of preview
             requestAnimationFrame(() => {
                 fullImg.style.opacity = '1'; // Fade in full image
                 if (previewImg) {
                     previewImg.style.opacity = '0'; // Fade out preview
                 }
+                // Preload the *next* image after the current one is displayed
                 triggerPreloadNext(index);
             });
-        }
+        };
         tempImg.onerror = function() {
             console.error("Error loading image:", newFullUrl);
-            if (previewImg) {
-                previewImg.style.opacity = '1'; // Keep preview visible on error
-            }
-            // Potentially show an error message to the user here
-        }
-        tempImg.src = newFullUrl;
+            // Keep preview visible on error, or show an error message
+            if (previewImg) previewImg.style.opacity = '1';
+            fullImg.style.opacity = '0'; // Ensure broken image doesn't show
+        };
+        tempImg.src = newFullUrl; // Start loading
 
         currentIndex = index;
     }
 
-
+    // --- Navigation Functions ---
     function showPrevImage() {
-        hideUIElements(); // Hide indicators on navigation
+        hideUIElements(); // Ensure UI is hidden on navigation
         const newIndex = (currentIndex - 1 + photos.length) % photos.length;
         showPhoto(newIndex);
     }
 
     function showNextImage() {
-        hideUIElements(); // Hide indicators on navigation
+        hideUIElements(); // Ensure UI is hidden on navigation
         const newIndex = (currentIndex + 1) % photos.length;
         showPhoto(newIndex);
     }
 
+    // --- Lightbox Open/Close ---
     function openLightbox(index) {
         currentIndex = index;
-        if (imageWrapper) imageWrapper.style.height = 'auto'; // Reset height before calculating
+        if (imageWrapper) imageWrapper.style.height = 'auto'; // Reset height before calculation
         lightbox.classList.add('active');
-        htmlElement.style.overflow = 'hidden'; // Prevent scrolling background
-        bodyElement.classList.add('lightbox-open'); // Add class for potential body styling
+        htmlElement.style.overflow = 'hidden';
+        bodyElement.classList.add('lightbox-open');
 
-        // Initial show without fade-in delay for the *first* image opened
-        const photo = photos[index];
-        if (!photo) return;
-        const newFullUrl = photo.dataset.url;
-        const newPreviewUrl = photo.querySelector('.preview-img')?.src;
-        lightboxDate.textContent = photo.dataset.date;
-        lightboxDescription.textContent = photo.dataset.description;
+        // Show the first photo without the initial fade-out of the (non-existent) previous image
+        showPhoto(index, true);
 
-        // Calculate max height for the image
-        const lightboxStyles = window.getComputedStyle(lightbox);
-        const lightboxPaddingY = parseFloat(lightboxStyles.paddingTop) + parseFloat(lightboxStyles.paddingBottom);
-        const photoInfoHeight = (photoInfo && window.getComputedStyle(photoInfo).display !== 'none') ? photoInfo.offsetHeight : 0;
-        const buffer = 20; // Extra vertical space buffer
-        const viewportMaxHeight = window.innerHeight - lightboxPaddingY - photoInfoHeight - buffer;
-        const finalMaxHeight = Math.min(viewportMaxHeight, 800); // Cap max height
-
-        if (imageWrapper) {
-             imageWrapper.style.height = `${finalMaxHeight}px`;
-        }
-
-        // Show preview instantly while full loads
-        if (newPreviewUrl && previewImg) {
-            previewImg.src = newPreviewUrl;
-            previewImg.style.opacity = '1';
-        } else if (previewImg) {
-            previewImg.style.opacity = '0';
-        }
-        fullImg.style.opacity = '0'; // Ensure full starts hidden
-        fullImg.src = ''; // Clear src
-
-        const tempImg = new Image();
-        tempImg.onload = function() {
-            fullImg.src = newFullUrl;
-            // Direct opacity set for first image load (no transition needed here)
-            fullImg.style.opacity = '1';
-            if (previewImg) {
-                previewImg.style.opacity = '0'; // Hide preview once full is ready
-            }
-            triggerPreloadNext(index); // Preload next image
-        }
-        tempImg.onerror = function() {
-            console.error("Error loading image:", newFullUrl);
-             if (previewImg) {
-                previewImg.style.opacity = '1'; // Keep preview on error
-            }
-             // Optionally show an error message
-        }
-        tempImg.src = newFullUrl; // Start loading the full image
-
-        showUIElements(); // Show indicators briefly
+        // Briefly show UI indicators only when first opening
+        showUIElements();
     }
 
     function closeLightbox() {
         lightbox.classList.remove('active');
-        hideUIElements();
-        if (uiTimer) {
-            clearTimeout(uiTimer);
-            uiTimer = null;
-        }
-        htmlElement.style.overflow = ''; // Restore scrolling
+        hideUIElements(); // Ensure UI is hidden
+        htmlElement.style.overflow = '';
         bodyElement.classList.remove('lightbox-open');
 
-        // Fade out the current image(s)
+        // Fade out current images smoothly
         fullImg.style.opacity = '0';
-        if(previewImg) previewImg.style.opacity = '0';
+        if (previewImg) previewImg.style.opacity = '0';
 
-        // Reset images after transition ends to clean up
+        // Reset images after transition (duration matches CSS: 0.3s)
         setTimeout(() => {
-            if (!lightbox.classList.contains('active')) { // Ensure lightbox is still closed
+            // Check if still closed, in case reopened quickly
+            if (!lightbox.classList.contains('active')) {
                 fullImg.src = '';
-                if (previewImg) {
-                    previewImg.src = '';
-                }
+                if (previewImg) previewImg.src = '';
                 if (imageWrapper) imageWrapper.style.height = 'auto'; // Reset dynamic height
             }
-        }, 300); // Match CSS transition duration
+        }, 300);
     }
 
+    // --- Masonry Grid Setup ---
     const grid = document.querySelector('.photo-grid');
     if (grid && typeof Masonry !== 'undefined') {
         masonry = new Masonry(grid, {
@@ -228,211 +196,207 @@ document.addEventListener('DOMContentLoaded', function() {
             columnWidth: '.photo-item',
             gutter: 16,
             percentPosition: true,
-            transitionDuration: 0 // Masonry transitions disabled
+            transitionDuration: 0 // Disable Masonry transitions
         });
     }
 
-    // --- Lazy Loading Logic for Grid Images ---
+    // --- Lazy Loading Grid Images ---
     const loadImage = (img) => {
         const highRes = img.dataset.src;
-        if (highRes && img.src !== highRes) { // Check if not already loaded
-            const tempLoader = new Image();
-            tempLoader.onload = () => {
-                img.src = highRes;
+        if (!highRes) { // Handle missing data-src
+            console.warn("Image missing data-src:", img);
+            const preview = img.parentElement.querySelector('.preview-img');
+            if (preview) preview.style.opacity = 0;
+            if (masonry) masonry.layout();
+            return;
+        }
+
+        // Check if already loaded or currently loading
+        if (img.src === highRes || img.classList.contains('loaded')) {
+             if (img.complete && img.naturalHeight > 0) { // Ensure fully loaded if src matches
                 img.classList.add('loaded');
                 const preview = img.parentElement.querySelector('.preview-img');
-                if (preview) {
-                    preview.style.opacity = 0; // Hide blurred preview
-                }
-                if (masonry) {
-                    masonry.layout(); // Re-layout Masonry after image load
-                }
-            };
-            tempLoader.onerror = () => {
-                 console.error("Failed to load lazy image:", highRes);
-                 // Optionally remove the broken image or show placeholder
-                 if (masonry) {
-                    masonry.layout(); // Layout might still be needed
-                 }
-            }
-            tempLoader.src = highRes; // Start loading high-res
-        } else if (img.complete && img.naturalHeight > 0 && highRes && img.src === highRes) {
-            // Already loaded (e.g., cached), just ensure state is correct
+                if (preview) preview.style.opacity = 0;
+                if (masonry) setTimeout(() => { if (masonry) masonry.layout(); }, 0);
+             }
+            return;
+        }
+
+
+        const tempLoader = new Image();
+        tempLoader.onload = () => {
+            img.src = highRes;
             img.classList.add('loaded');
             const preview = img.parentElement.querySelector('.preview-img');
             if (preview) preview.style.opacity = 0;
-            if (masonry) {
-               // Use setTimeout to ensure layout happens after potential render updates
-               setTimeout(() => { if (masonry) masonry.layout(); }, 0);
-            }
-        } else if (!highRes) {
-             // Handle cases where data-src might be missing
-             console.warn("Image missing data-src:", img);
-             const preview = img.parentElement.querySelector('.preview-img');
-             if (preview) preview.style.opacity = 0; // Hide preview anyway
-             if (masonry) {
-                 masonry.layout();
-             }
-        }
+            if (masonry) masonry.layout();
+        };
+        tempLoader.onerror = () => {
+            console.error("Failed to load lazy image:", highRes);
+            if (masonry) masonry.layout();
+        };
+        tempLoader.src = highRes;
     };
 
-    // --- Event Listeners Setup ---
+    // --- Event Listeners ---
 
-    // Open lightbox on photo item click
+    // Grid item click
     photos.forEach((photo, index) => {
         photo.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default anchor behavior if any
+            e.preventDefault();
             openLightbox(index);
         });
     });
 
-
-    // Lightbox click/tap handler
+    // Lightbox interaction (Desktop Clicks)
     if (lightbox) {
         lightbox.addEventListener('click', function(event) {
-            // Prevent closing if clicking directly on image info area
-            if (photoInfo.contains(event.target)) {
+            // Ignore clicks during swipe action
+            if (isSwiping) {
                 return;
             }
-             // Prevent closing if click lands exactly on an indicator *while visible*
-            if (indicatorLeft.contains(event.target) || indicatorRight.contains(event.target)) {
-                 // Check computed opacity to see if they are actually visible
-                 if (window.getComputedStyle(indicatorLeft).opacity !== '0' || window.getComputedStyle(indicatorRight).opacity !== '0') {
-                    return; // Don't close if clicking visible indicator
-                 }
+            // Ignore clicks on photo info area
+            if (photoInfo.contains(event.target)) {
+                return;
             }
 
             const clickX = event.clientX;
             const windowWidth = window.innerWidth;
-            const leftZoneEnd = windowWidth * 0.30; // Left 30% for previous
-            const rightZoneStart = windowWidth * 0.70; // Right 30% for next
+            const leftZoneEnd = windowWidth * 0.30;
+            const rightZoneStart = windowWidth * 0.70;
 
             if (clickX < leftZoneEnd) {
                 showPrevImage();
             } else if (clickX > rightZoneStart) {
                 showNextImage();
             } else {
-                // Click in the middle (40%) closes the lightbox
                 closeLightbox();
             }
         });
 
-        // Touch start listener
+        // Touch Interactions (Mobile Swipes and Taps)
         lightbox.addEventListener('touchstart', function(event) {
-            // Only track single touch
-            if (event.touches.length === 1) {
-                touchStartX = event.changedTouches[0].screenX;
-                touchStartY = event.changedTouches[0].screenY;
+            if (event.touches.length === 1) { // Ignore multi-touch gestures
+                touchStartX = event.touches[0].clientX;
+                touchStartY = event.touches[0].clientY;
+                isSwiping = false; // Reset swipe flag
             }
         }, { passive: true });
 
-        // Touch end listener
-        lightbox.addEventListener('touchend', function(event) {
-            if (touchStartX === 0) return; // Exit if touch didn't start properly
+        lightbox.addEventListener('touchmove', function(event) {
+            if (event.touches.length === 1 && touchStartX !== 0) {
+                touchEndX = event.touches[0].clientX;
+                touchEndY = event.touches[0].clientY;
+                 // Check if movement exceeds threshold - helps distinguish tap from scroll/swipe start
+                if (Math.abs(touchEndX - touchStartX) > 10 || Math.abs(touchEndY - touchStartY) > 10) {
+                    isSwiping = true; // Consider it a swipe if moved significantly
+                }
+            }
+        }, { passive: true });
 
-            // Only track single touch end
-            if (event.changedTouches.length === 1) {
-                touchEndX = event.changedTouches[0].screenX;
-                touchEndY = event.changedTouches[0].screenY;
+        lightbox.addEventListener('touchend', function(event) {
+            if (event.changedTouches.length === 1 && touchStartX !== 0) { // Ensure it's the end of our tracked touch
+                touchEndX = event.changedTouches[0].clientX;
+                touchEndY = event.changedTouches[0].clientY;
 
                 const deltaX = touchEndX - touchStartX;
                 const deltaY = touchEndY - touchStartY;
+                const absDeltaX = Math.abs(deltaX);
+                const absDeltaY = Math.abs(deltaY);
 
-                // Store start X before resetting, needed for tap zone check
-                const startX = touchStartX;
-                const windowWidth = window.innerWidth;
-                const leftZoneEnd = windowWidth * 0.30;
-                const rightZoneStart = windowWidth * 0.70;
-
-                // Reset coordinates immediately
-                touchStartX = 0;
-                touchStartY = 0;
-
-                // Check for horizontal swipe first (more horizontal movement than vertical)
-                if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaX) > Math.abs(deltaY)) {
-                    if (deltaX < 0) { // Swipe left
+                // Determine action based on swipe or tap
+                if (absDeltaX > swipeThreshold && absDeltaX > absDeltaY) {
+                    // Horizontal Swipe
+                    if (deltaX < 0) { // Swipe Left
                         showNextImage();
-                    } else { // Swipe right
+                    } else { // Swipe Right
                         showPrevImage();
                     }
-                }
-                // Else, check for tap (minimal movement)
-                else if (Math.abs(deltaX) < swipeThreshold && Math.abs(deltaY) < swipeThreshold) {
-                     // Check if the tap occurred in the middle zone
-                     if (startX >= leftZoneEnd && startX <= rightZoneStart) {
-                          closeLightbox();
-                     } else {
-                        // If tap was in side zones, briefly show indicators as feedback
-                        showUIElements();
-                     }
-                }
-                // Vertical swipes or ambiguous gestures are ignored
-            }
+                    isSwiping = true; // Explicitly mark as swipe completed
+                } else if (absDeltaX < swipeThreshold && absDeltaY < swipeThreshold) {
+                    // Tap (minimal movement) - Simulate click logic zones
+                    const windowWidth = window.innerWidth;
+                    const leftZoneEnd = windowWidth * 0.30;
+                    const rightZoneStart = windowWidth * 0.70;
 
-        }, { passive: true });
+                    if (touchStartX < leftZoneEnd) {
+                        showPrevImage();
+                    } else if (touchStartX > rightZoneStart) {
+                        showNextImage();
+                    } else {
+                        closeLightbox();
+                    }
+                     // Reset isSwiping just in case it was incorrectly set by small movement
+                     isSwiping = false;
+                }
+                // Reset touch coordinates
+                touchStartX = 0;
+                touchStartY = 0;
+            }
+             // After touchend completes, ensure isSwiping is reset if needed for the next click event.
+             // Using a small timeout allows the click event to potentially check this flag.
+             setTimeout(() => { isSwiping = false; }, 50);
+        });
     }
 
-
-    // Keyboard navigation
+    // Keyboard Navigation
     document.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('active')) return; // Only act if lightbox is open
+        if (!lightbox.classList.contains('active')) return;
 
         switch (e.key) {
             case 'Escape':
                 closeLightbox();
                 break;
             case 'ArrowLeft':
-            case 'ArrowUp': // Treat Up as previous as well
+            case 'ArrowUp':
                 showPrevImage();
                 break;
             case 'ArrowRight':
-            case 'ArrowDown': // Treat Down as next as well
+            case 'ArrowDown':
                 showNextImage();
                 break;
         }
     });
 
-    // --- Initialize Lazy Loading for Grid ---
+    // --- Initialize Grid Lazy Loading ---
     const mainImages = document.querySelectorAll('.photo-item .main-img');
     if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    loadImage(entry.target); // Load image when it enters viewport
-                    observer.unobserve(entry.target); // Stop observing once loaded
+                    loadImage(entry.target);
+                    observer.unobserve(entry.target);
                 }
             });
-        }, { rootMargin: '50px 0px', threshold: 0.01 }); // Trigger slightly before visible
+        }, { rootMargin: '100px 0px', threshold: 0.01 }); // Load slightly sooner
 
         mainImages.forEach(img => {
-            if (img.dataset.src) {
-                observer.observe(img); // Observe images with data-src
-            } else {
-                // Handle images missing data-src (log warning, hide preview)
-                const preview = img.parentElement.querySelector('.preview-img');
-                if (preview) preview.style.opacity = 0;
-                console.warn("Image missing data-src, cannot lazy load:", img);
-                if (masonry) {
-                    masonry.layout(); // Still layout
-                }
-            }
-        });
-    } else {
-        // Fallback for browsers without IntersectionObserver
-        console.warn("IntersectionObserver not supported, loading all grid images eagerly.");
-        mainImages.forEach(img => loadImage(img));
-        // Ensure Masonry layouts after images load (using imagesLoaded library if available)
-        if (masonry) {
-             if (typeof imagesLoaded !== 'undefined') {
-                 imagesLoaded(grid).on('always', function() {
-                    // Layout Masonry once all images (even broken ones) are settled
-                    if (masonry) masonry.layout();
-                 });
-             } else {
-                 // Fallback if imagesLoaded isn't present, layout after a delay
-                 console.warn("imagesLoaded library not found. Using timeout for Masonry layout fallback.");
-                 setTimeout(() => { if (masonry) masonry.layout(); }, 500); // Adjust delay as needed
+             if (img.dataset.src) { // Only observe if data-src exists
+                observer.observe(img);
+             } else { // Handle missing data-src immediately
+                 const preview = img.parentElement.querySelector('.preview-img');
+                 if (preview) preview.style.opacity = 0;
+                 console.warn("Image missing data-src, cannot lazy load:", img);
              }
+        });
+         // Initial layout check for Masonry after setup
+         if (masonry) {
+            setTimeout(() => { if(masonry) masonry.layout(); }, 100);
+         }
+
+    } else {
+        // Fallback for older browsers
+        console.warn("IntersectionObserver not supported, loading all grid images.");
+        mainImages.forEach(img => loadImage(img));
+        if (masonry) {
+            if (typeof imagesLoaded !== 'undefined') {
+                imagesLoaded(grid).on('always', function() {
+                    if (masonry) masonry.layout();
+                });
+            } else {
+                console.warn("imagesLoaded library not found. Using timeout fallback for Masonry layout.");
+                setTimeout(() => { if (masonry) masonry.layout(); }, 1000);
+            }
         }
     }
 

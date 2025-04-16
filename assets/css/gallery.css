@@ -97,6 +97,7 @@ body.lightbox-open {
   overflow: hidden;
 }
 
+/* Ensure both images have the opacity transition */
 .lightbox-image-wrapper .preview-img,
 .lightbox-image-wrapper .full-img {
   display: block;
@@ -104,7 +105,7 @@ body.lightbox-open {
   max-height: 100%;
   width: auto;
   height: auto;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease; /* Apply transition here */
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -168,6 +169,7 @@ body.lightbox-open {
   transition: opacity 0.3s ease;
 }
 
+/* Class to make indicators visible */
 .lightbox .indicators-visible {
   opacity: 0.7;
 }
@@ -211,6 +213,6 @@ body.lightbox-open {
     right: 0.5rem;
   }
    .lightbox .indicators-visible {
-    opacity: 0.7;
+    opacity: 0.7; /* Ensure this is still applied */
    }
 }
