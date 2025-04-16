@@ -1,95 +1,37 @@
-html.fancybox__html,
-body.fancybox__body {
-  overflow: hidden !important;
-}
-
-.photo-grid-flex {
+.photo-list {
   margin: 2rem auto;
-  width: 95%;
-  position: relative;
+  max-width: 600px;
 }
 
-.photo-item-flex {
-  width: 31.5%;
-  box-sizing: border-box;
-  margin: 0.2rem;
-  cursor: pointer;
-  overflow: hidden;
-  background: var(--accent-background);
-  text-decoration: none;
+.photo-item {
+  margin-bottom: 2rem;
 }
 
-.photo-item-flex .main-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.3s ease, opacity 0.5s ease;
-  opacity: 1;
-  vertical-align: middle;
-  /* Add max-width to prevent thumbnails getting too large */
-  max-width: 400px; /* Adjust value as needed */
-  /* Center image if container is wider than max-width */
+.photo-item .photo-img {
+  display: block;       
+  max-width: 100%;       
+  max-height: 600px;     
+  width: auto;            
+  height: auto;           
+  min-height: 100px;
+  margin-left: auto;     
+  margin-right: auto;    
+  background-color: var(--accent-background);
+}
+
+.photo-caption {
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  color: var(--text-color);
+  text-align: center;
+  padding: 0 1rem;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.photo-item-flex:hover .main-img {
-  transform: scale(1.02);
-  opacity: 0.88;
-}
-
-/* Corrected Medium Screen Query */
-@media (max-width: 700px) { /* Added px */
-  .photo-item-flex {
-     width: 47.5%;
-     /* Margin remains 0.2rem */
+@media (max-width: 840px) {
+  .photo-caption {
+     max-width: 95%;
   }
 }
-
-/* Corrected Small Screen Query */
-@media (max-width: 321px) { /* Added px */
-  .photo-item-flex {
-     width: 100%; /* Use full width */
-     margin: 0.1rem 0; /* Adjust margin for full width */
-   }
-   .photo-grid-flex {
-     width: 100%; /* Use full width container */
-     margin: 1rem 0; /* Adjust margin for full width */
-   }
-   .photo-item-flex .main-img {
-     /* Optionally remove max-width on smallest screens if desired */
-     /* max-width: none; */
-   }
-}
-
-.fancybox-image {
-  max-width: 800px;
-  max-height: 800px;
-  width: auto;
-  height: auto;
-  margin: auto;
-}
-
-/* Use more specific selector for potentially better override */
-.fancybox__slide img {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: min(100%, 800px);
-  max-height: 800px;
-  margin: auto;
-}
-
-
-.fancybox__backdrop {
-   background-image: linear-gradient(to bottom, rgba(25, 25, 25, 0.95), rgba(45, 45, 45, 0.92));
-}
-
-.fancybox__caption {
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 0.75rem 1rem;
-  color: var(--text-color);
-  background: none;
-}
-

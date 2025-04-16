@@ -4,9 +4,13 @@
   <body a="{{ site.theme_config.appearance | default: 'auto' }}">
 
     <main class="page-content" aria-label="Content">
-      <div class="w">
+      {%- if page.layout == 'home' -%}
         {{ content }}
-      </div>
+      {%- else -%}
+        <div class="w">
+          {{ content }}
+        </div>
+      {%- endif -%}
     </main>
 
     {%- if site.goat_counter and jekyll.environment == "production" -%}
@@ -19,45 +23,7 @@
       {% endfor %}
     {% endif %}
 
-    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
-    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const grid = document.querySelector('.photo-grid-flex');
-        if (grid) {
-          imagesLoaded(grid, function() {
-            new Masonry(grid, {
-              itemSelector: '.photo-item-flex',
-              percentPosition: true,
-              columnWidth: '.photo-item-flex'
-            });
-          });
-        }
-      });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        Fancybox.bind("[data-fancybox='gallery']", {
-          hideScrollbar: false,
-          contentClick: false,
-          idle: 500,
-          wheel: "next",
-          Carousel: {
-            Panzoom: {
-              touch: false
-            },
-            transition: "slide"
-          },
-          Toolbar: false,
-          Thumbs: false,
-          Images: {
-            zoom: false
-          }
-        });
-      });
-    </script>
+    <script src="{{ '/assets/js/lazy_load.js' | relative_url }}" defer></script>
 
   </body>
 </html>
