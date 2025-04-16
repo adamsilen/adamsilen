@@ -57,7 +57,6 @@
   z-index: 1000;
   padding: 1rem;
   box-sizing: border-box;
-  /* overflow-y: auto; */ /* REMOVE THIS */
   overflow-x: hidden;
   opacity: 0;
   pointer-events: none;
@@ -65,7 +64,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  -webkit-tap-highlight-color: transparent; /* Add this */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .lightbox.active {
@@ -93,7 +92,6 @@
   overflow: hidden;
 }
 
-/* Images within the wrapper */
 .lightbox-image-wrapper .preview-img,
 .lightbox-image-wrapper .full-img {
   display: block;
@@ -102,15 +100,13 @@
   width: auto;
   height: auto;
   transition: opacity 0.3s ease;
-  /* Prevent selection/dragging */
   user-select: none;
-  -webkit-user-select: none; /* Safari */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE/Edge */
-  -webkit-user-drag: none; /* Safari */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-drag: none;
 }
 
-/* Preview specific styles */
 .lightbox-image-wrapper .preview-img {
   position: absolute;
   top: 0;
@@ -125,7 +121,6 @@
   transform: translateZ(0);
 }
 
-/* Full image specific styles */
 .lightbox-image-wrapper .full-img {
   position: relative;
   object-fit: contain;
@@ -140,18 +135,16 @@
   padding-top: 0.75rem;
   flex-shrink: 0;
   box-sizing: border-box;
-  user-select: none; /* Prevent text selection here too */
- -webkit-user-select: none;
- -moz-user-select: none;
- -ms-user-select: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .photo-date {
   font-size: 0.9rem;
   opacity: 0.8;
 }
-
-/* ... (Rest of styles: buttons, indicators, media queries remain the same) ... */
 
 .lightbox button {
   position: absolute;
@@ -161,7 +154,7 @@
   font-size: 2rem;
   cursor: pointer;
   padding: 1rem;
-  z-index: 1001;
+  z-index: 1001; /* Keep this for prev/next if they exist */
 }
 
 .lightbox .close {
@@ -181,7 +174,7 @@
   font-weight: bold;
   text-align: center;
   cursor: pointer;
-  z-index: 1010;
+  z-index: 2000; /* Increased */
   padding: 0;
   text-shadow: none;
   transition: opacity 0.3s ease;
@@ -205,7 +198,7 @@
   color: rgba(255, 255, 255, 0.9);
   font-size: 2.5rem;
   font-weight: bold;
-  z-index: 1002;
+  z-index: 1002; /* Keep below close button */
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
