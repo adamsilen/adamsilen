@@ -1,218 +1,95 @@
-body.lightbox-open {
+html.fancybox__html,
+body.fancybox__body {
   overflow: hidden !important;
-  overflow-x: hidden !important;
 }
 
-.photo-grid {
-  margin: 2rem 0;
-  width: 100%;
-}
-
-.photo-item {
-  width: calc(33.333% - 1rem);
-  margin-bottom: 1rem;
+.photo-grid-flex {
+  margin: 2rem auto;
+  width: 95%;
   position: relative;
+}
+
+.photo-item-flex {
+  width: 31.5%;
+  box-sizing: border-box;
+  margin: 0.2rem;
   cursor: pointer;
   overflow: hidden;
   background: var(--accent-background);
+  text-decoration: none;
 }
 
-.photo-item .preview-img,
-.photo-item .main-img {
+.photo-item-flex .main-img {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
-}
-
-.photo-item .preview-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  filter: blur(10px);
-  transition: opacity 0.3s ease;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.photo-item .main-img {
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.photo-item .main-img.loaded {
+  transition: transform 0.3s ease, opacity 0.5s ease;
   opacity: 1;
+  vertical-align: middle;
+  /* Add max-width to prevent thumbnails getting too large */
+  max-width: 400px; /* Adjust value as needed */
+  /* Center image if container is wider than max-width */
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.photo-item .main-img.loaded + .preview-img {
-  opacity: 0;
+.photo-item-flex:hover .main-img {
+  transform: scale(1.02);
+  opacity: 0.88;
 }
 
-.photo-item:hover .main-img.loaded {
-  transform: scale(1.05);
-}
-
-.lightbox {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 1);
-  z-index: 1000;
-  padding: 1rem;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.lightbox.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.lightbox-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  max-width: 800px;
-  margin: auto;
-  padding-bottom: 1rem;
-  box-sizing: border-box;
-}
-
-.lightbox-image-wrapper {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-/* Ensure both images have the opacity transition */
-.lightbox-image-wrapper .preview-img,
-.lightbox-image-wrapper .full-img {
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  transition: opacity 0.3s ease; /* Apply transition here */
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-drag: none;
-}
-
-.lightbox-image-wrapper .preview-img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  filter: blur(10px);
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0; /* Start hidden */
-}
-
-.lightbox-image-wrapper .full-img {
-  position: relative;
-  object-fit: contain;
-  z-index: 0;
-  opacity: 0; /* Start hidden, will fade in */
-}
-
-.photo-info {
-  color: white;
-  text-align: center;
-  width: 100%;
-  padding-top: 0.75rem;
-  flex-shrink: 0;
-  box-sizing: border-box;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-
-.photo-date {
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.swipe-indicator {
-  position: absolute;
-  top: 50%;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 2.5rem;
-  font-weight: bold;
-  z-index: 1002;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  transform: translateY(-50%);
-  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-/* Class to make indicators visible */
-.lightbox .indicators-visible {
-  opacity: 0.7;
-}
-
-
-.swipe-indicator-left {
-  left: 1.5rem;
-}
-
-.swipe-indicator-right {
-  right: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .photo-item {
-    width: calc(50% - 1rem);
+/* Corrected Medium Screen Query */
+@media (max-width: 700px) { /* Added px */
+  .photo-item-flex {
+     width: 47.5%;
+     /* Margin remains 0.2rem */
   }
+}
 
-  .lightbox {
-    padding: 0.5rem;
-  }
-
-  .lightbox-content {
-    max-width: none;
-    padding-bottom: 0.5rem;
-  }
-
-  .photo-info {
-    padding-top: 0.5rem;
-    width: calc(100% - 1rem);
-    margin: 0 auto;
-  }
-
-  .swipe-indicator {
-    font-size: 2rem;
-  }
-  .swipe-indicator-left {
-    left: 0.5rem;
-  }
-  .swipe-indicator-right {
-    right: 0.5rem;
-  }
-   .lightbox .indicators-visible {
-    opacity: 0.7; /* Ensure this is still applied */
+/* Corrected Small Screen Query */
+@media (max-width: 321px) { /* Added px */
+  .photo-item-flex {
+     width: 100%; /* Use full width */
+     margin: 0.1rem 0; /* Adjust margin for full width */
+   }
+   .photo-grid-flex {
+     width: 100%; /* Use full width container */
+     margin: 1rem 0; /* Adjust margin for full width */
+   }
+   .photo-item-flex .main-img {
+     /* Optionally remove max-width on smallest screens if desired */
+     /* max-width: none; */
    }
 }
+
+.fancybox-image {
+  max-width: 800px;
+  max-height: 800px;
+  width: auto;
+  height: auto;
+  margin: auto;
+}
+
+/* Use more specific selector for potentially better override */
+.fancybox__slide img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, 800px);
+  max-height: 800px;
+  margin: auto;
+}
+
+
+.fancybox__backdrop {
+   background-image: linear-gradient(to bottom, rgba(25, 25, 25, 0.95), rgba(45, 45, 45, 0.92));
+}
+
+.fancybox__caption {
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
+  background: none;
+}
+

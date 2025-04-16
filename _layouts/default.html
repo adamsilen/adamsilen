@@ -1,27 +1,63 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang }}">
+<html lang="{{ site.lang | default: "en" }}">
   {%- include head.html -%}
-  <body a="{{ site.theme_config.appearance | default: "auto" }}">
-    
+  <body a="{{ site.theme_config.appearance | default: 'auto' }}">
+
     <main class="page-content" aria-label="Content">
       <div class="w">
         {{ content }}
       </div>
     </main>
 
-    {%-if site.goat_counter and jekyll.environment == "production"-%}
-    {%-include goat_counter.html-%}
-  {%-endif-%}
+    {%- if site.goat_counter and jekyll.environment == "production" -%}
+      {%- include goat_counter.html -%}
+    {%- endif -%}
 
-  {% if page.custom_js %}
-    {% for js_file in page.custom_js %}
-      <script type="text/javascript" src="{{ site.baseurl }}/assets/js/{{ js_file }}.js"></script>
-    {% endfor %}
-  {% endif %}
+    {% if page.custom_js %}
+      {% for js_file in page.custom_js %}
+        <script type="text/javascript" src="{{ '/assets/js/' | append: js_file | append: '.js' | relative_url }}"></script>
+      {% endfor %}
+    {% endif %}
 
-  <script src="{{ '/assets/js/gallery.js' | relative_url }}" defer></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const grid = document.querySelector('.photo-grid-flex');
+        if (grid) {
+          imagesLoaded(grid, function() {
+            new Masonry(grid, {
+              itemSelector: '.photo-item-flex',
+              percentPosition: true,
+              columnWidth: '.photo-item-flex'
+            });
+          });
+        }
+      });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        Fancybox.bind("[data-fancybox='gallery']", {
+          hideScrollbar: false,
+          contentClick: false,
+          idle: 500,
+          wheel: "next",
+          Carousel: {
+            Panzoom: {
+              touch: false
+            },
+            transition: "slide"
+          },
+          Toolbar: false,
+          Thumbs: false,
+          Images: {
+            zoom: false
+          }
+        });
+      });
+    </script>
 
   </body>
-
-
 </html>
