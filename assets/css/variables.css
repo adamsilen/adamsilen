@@ -1,13 +1,15 @@
 :root {
-  --light-bg: #f3f3f3;
+  --light-bg: #fafafd;
   --light-text: #26262a;
   --light-accent: #c99c22;
   --light-accent-bg: #e7e3d9cc;
+  --light-border-color: rgba(0, 0, 0, 0.05);
 
   --dark-bg: #26262a;
-  --dark-text: #f3f3f3;
+  --dark-text: #fafafd;
   --dark-accent: #c99c22;
   --dark-accent-bg: #6c5d3b9e;
+  --dark-border-color: rgba(255, 255, 255, 0.02);
 
   --theme-font: "IBM Plex Mono", monospace;
   --body-font: "Atkinson Hyperlegible Next", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -17,6 +19,7 @@
   --text-color: var(--light-text);
   --accent-color: var(--light-accent);
   --accent-background: var(--light-accent-bg);
+  --border-color: var(--light-border-color);
 }
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
@@ -24,6 +27,7 @@
       --text-color: var(--light-text);
       --accent-color: var(--light-accent);
       --accent-background: var(--light-accent-bg);
+      --border-color: var(--light-border-color);
   }
 }
 
@@ -33,6 +37,7 @@
       --text-color: var(--dark-text);
       --accent-color: var(--dark-accent);
       --accent-background: var(--dark-accent-bg);
+      --border-color: var(--dark-border-color); 
   }
 
   :root:not([data-theme="light"]) .no-results-images img,
@@ -46,6 +51,7 @@
   --text-color: var(--light-text);
   --accent-color: var(--light-accent);
   --accent-background: var(--light-accent-bg);
+  --border-color: var(--light-border-color); 
 }
 
 :root[data-theme="dark"] {
@@ -53,6 +59,7 @@
   --text-color: var(--dark-text);
   --accent-color: var(--dark-accent);
   --accent-background: var(--dark-accent-bg);
+  --border-color: var(--dark-border-color); 
 }
 
 :root[data-theme="dark"] .no-results-images img,

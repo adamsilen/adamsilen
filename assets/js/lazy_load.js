@@ -1,31 +1,54 @@
 document.addEventListener("DOMContentLoaded", function() {
-  const lazyImages = [].slice.call(document.querySelectorAll("img.lazy-image"));
+  const photoItems = document.querySelectorAll(".photo-item");
 
   if ("IntersectionObserver" in window) {
-    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-      entries.forEach(function(entry) {
+    const loadObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
-          let lazyImage = entry.target;
-          lazyImage.src = lazyImage.dataset.src;
-          lazyImage.classList.remove("lazy-image");
-          lazyImage.classList.add("lazy-loaded");
-          lazyImageObserver.unobserve(lazyImage);
+          const photoItem = entry.target;
+          const lazyImage = photoItem.querySelector("img[data-src]");
+          const caption = photoItem.querySelector('.photo-caption');
+
+          if (lazyImage) {
+            lazyImage.src = lazyImage.dataset.src;
+            lazyImage.removeAttribute('data-src');
+            lazyImage.classList.add('lazy-loaded');
+
+            photoItem.classList.add('has-loaded');
+            if (caption) {
+              setTimeout(() => caption.classList.add('has-loaded'), 100);
+            }
+            observer.unobserve(photoItem);
+          }
         }
       });
     }, {
-      rootMargin: "0px 0px 200px 0px" // Start loading when image is 200px below the viewport
-      // Adjust rootMargin as needed. 0px loads only when it enters viewport.
-      // Positive bottom margin loads it sooner.
+      rootMargin: "0px 0px 200px 0px",
+      threshold: 0.01
     });
 
-    lazyImages.forEach(function(lazyImage) {
-      lazyImageObserver.observe(lazyImage);
+    photoItems.forEach(item => {
+      if (item.querySelector("img[data-src]")) {
+           loadObserver.observe(item);
+      } else {
+           item.classList.add('has-loaded');
+           const caption = item.querySelector('.photo-caption');
+           if (caption) caption.classList.add('has-loaded');
+      }
     });
+
   } else {
-    // Fallback for browsers that don't support IntersectionObserver
-    // Load all images immediately
-    lazyImages.forEach(function(lazyImage) {
-      lazyImage.src = lazyImage.dataset.src;
+    
+    photoItems.forEach(item => {
+        const lazyImage = item.querySelector("img[data-src]");
+        const caption = item.querySelector('.photo-caption');
+        if (lazyImage) {
+            lazyImage.src = lazyImage.dataset.src;
+            lazyImage.removeAttribute('data-src');
+            lazyImage.classList.add('lazy-loaded');
+        }
+        item.classList.add('has-loaded');
+        if(caption) caption.classList.add('has-loaded');
     });
   }
 });
