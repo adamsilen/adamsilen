@@ -17,7 +17,7 @@ title: Adam Silén
 
     {% assign photo_date_formatted = photo.date | date: '%-d %B %Y' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december' %}
     {% assign imagekit_full_path = page.imagekit_base_url | append: photo.image %}
-    {% assign large_url = imagekit_full_path | append: "?tr=w-1200,h-1200,c-at_max,q-99,f-auto" %}
+    {% assign large_url = imagekit_full_path | append: "?tr=w-1400,h-1400,c-at_max,q-99,f-auto" %}
 
     <div class="photo-item">
       <img data-src="{{ large_url }}"
