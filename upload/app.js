@@ -2,6 +2,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add this Map to store all selected files
     let selectedFiles = new Map();
 
+    /**
+     * Sanitizes filename to match ImageKit's transformation
+     * ImageKit automatically converts spaces and special characters to underscores
+     */
+    function sanitizeFilename(filename) {
+        const lastDot = filename.lastIndexOf('.');
+        const name = filename.substring(0, lastDot);
+        const ext = filename.substring(lastDot);
+        
+        // Replace spaces and special characters with underscores
+        // This matches ImageKit's transformation rules
+        const sanitized = name
+            .replace(/\s+/g, '_')           // spaces to underscores
+            .replace(/[()[\]{}]/g, '_')     // brackets/parentheses to underscores
+            .replace(/[#%&+]/g, '_')        // other special chars to underscores
+            .replace(/_+/g, '_')            // multiple underscores to single
+            .replace(/^_|_$/g, '');         // trim underscores from start/end
+        
+        return sanitized + ext;
+    }
+
     const form = document.getElementById('uploadForm');
     const dropzone = document.getElementById('dropzone');
     const photoInput = document.getElementById('photoInput');
@@ -209,6 +230,10 @@ for (const container of containers) {
         const date = container.querySelector('input[type="date"]').value;
         const description = container.querySelector('textarea').value;
 
+        // Sanitize filename to match ImageKit's transformation
+        const sanitizedFileName = sanitizeFilename(fileName);
+        console.log(`Sanitizing: "${fileName}" → "${sanitizedFileName}"`);
+
         // Get fresh auth parameters for each file
         const authResponse = await fetch(CONFIG.signatureEndpoint, {
             method: 'POST',
@@ -226,22 +251,22 @@ for (const container of containers) {
 
         // Resize and upload image
         const resizedBlob = await resizeImage(file);
-        console.log(`Uploading ${fileName} to ImageKit...`);
+        console.log(`Uploading ${sanitizedFileName} to ImageKit...`);
         
         const uploadResult = await new Promise((resolve, reject) => {
             imagekit.upload({
                 file: resizedBlob,
-                fileName: fileName,
+                fileName: sanitizedFileName,  // Use sanitized filename
                 token: authData.token,
                 signature: authData.signature,
                 expire: authData.expire,
                 useUniqueFileName: false
             }, function(err, result) {
                 if (err) {
-                    console.error(`Upload error for ${fileName}:`, err);
+                    console.error(`Upload error for ${sanitizedFileName}:`, err);
                     reject(err);
                 } else {
-                    console.log(`Successfully uploaded ${fileName}`);
+                    console.log(`Successfully uploaded ${sanitizedFileName}`);
                     resolve(result);
                 }
             });
@@ -250,10 +275,10 @@ for (const container of containers) {
         // Collect the entry
         newEntries.push({
             date,
-            fileName,
+            fileName: sanitizedFileName,  // Use sanitized filename
             description
         });
-        console.log(`Added ${fileName} to entries`);
+        console.log(`Added ${sanitizedFileName} to entries`);
     } catch (error) {
         console.error(`Error processing ${container.querySelector('.file-info').textContent}:`, error);
     }
