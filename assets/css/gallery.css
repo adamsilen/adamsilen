@@ -240,7 +240,6 @@
 
 @media (max-width: 480px) {
   #nav-bar {
-    flex-direction: column;
     gap: 0.5rem;
     bottom: 1rem;
   }
