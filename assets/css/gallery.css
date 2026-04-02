@@ -49,7 +49,6 @@
   opacity: 1;
 }
 
-/* Tags hidden from captions — only used for JS filtering via data-tags */
 .photo-tags {
   display: none;
 }
@@ -59,15 +58,27 @@
 }
 
 /*===============================
+  Navigation container
+===============================*/
+
+#nav-bar {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 100;
+  max-width: calc(100vw - 2rem);
+}
+
+/*===============================
   Shared nav pill styles
 ===============================*/
 
-/* Both navigators sit fixed at the bottom, centred */
 #tag-nav,
 #month-nav {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 0.1rem;
@@ -79,14 +90,9 @@
   font-size: 0.8rem;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 100;
   white-space: nowrap;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
-  max-width: calc(100vw - 2rem);
 }
-
-#tag-nav  { bottom: 4.5rem; }
-#month-nav { bottom: 1.5rem; }
 
 #tag-nav button,
 #month-nav button {
@@ -105,15 +111,10 @@
   min-width: 2rem;
 }
 
-#tag-nav button:hover:not(:disabled),
-#month-nav button:hover:not(:disabled) {
+#tag-nav button:hover,
+#month-nav button:hover {
   background: var(--text-color);
   color: var(--background-color);
-}
-
-#month-nav button:disabled {
-  opacity: 0.25;
-  cursor: default;
 }
 
 /*===============================
@@ -136,15 +137,10 @@
   font-size: 0.75rem;
 }
 
-/*===============================
-  Tag dropdown
-===============================*/
-
 #tag-dropdown {
   position: absolute;
   bottom: calc(100% + 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   background: var(--background-color);
   border: 1px solid var(--border-color);
   border-radius: 0.75rem;
@@ -181,20 +177,15 @@
 
 #month-label {
   font-weight: 600;
-  min-width: 9rem;
+  min-width: 7rem;
   text-align: center;
   position: relative;
 }
 
-/*===============================
-  Month dropdown
-===============================*/
-
 #month-dropdown {
   position: absolute;
   bottom: calc(100% + 0.5rem);
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
   background: var(--background-color);
   border: 1px solid var(--border-color);
   border-radius: 0.75rem;
@@ -248,19 +239,9 @@
 ===============================*/
 
 @media (max-width: 480px) {
-  #tag-nav,
-  #month-nav {
-    font-size: 0.75rem;
+  #nav-bar {
+    flex-direction: column;
+    gap: 0.5rem;
+    bottom: 1rem;
   }
-
-  #month-label {
-    min-width: 7.5rem;
-  }
-
-  #tag-label {
-    min-width: 4rem;
-  }
-
-  #month-nav { bottom: 1.75rem; }
-  #tag-nav   { bottom: 4.75rem; }
 }

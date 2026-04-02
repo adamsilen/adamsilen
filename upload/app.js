@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Add this Map to store all selected files
     let selectedFiles = new Map();
+    let existingTags = [];
 
     /**
      * Sanitizes filename to match ImageKit's transformation
@@ -32,6 +33,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Get today's date for new uploads
     const today = new Date().toISOString().split('T')[0];
+
+    // Fetch existing tags from photos.yml
+    async function fetchExistingTags() {
+        try {
+            const response = await fetch('https://raw.githubusercontent.com/adamsilen/adamsilen/main/_data/photos.yml');
+            const yaml = await response.text();
+            
+            // Extract all tags from YAML
+            const tagMatches = yaml.match(/tags:\s*\[(.*?)\]/g);
+            const tags = new Set();
+            
+            if (tagMatches) {
+                tagMatches.forEach(match => {
+                    const tagsStr = match.replace(/tags:\s*\[|\]/g, '');
+                    tagsStr.split(',').forEach(tag => {
+                        const trimmed = tag.trim();
+                        if (trimmed) tags.add(trimmed);
+                    });
+                });
+            }
+            
+            existingTags = Array.from(tags).sort();
+            console.log('Existing tags:', existingTags);
+        } catch (error) {
+            console.error('Failed to fetch existing tags:', error);
+        }
+    }
+
+    // Fetch tags on load
+    fetchExistingTags();
 
     // Handle file selection
     dropzone.addEventListener('click', () => photoInput.click());
@@ -129,6 +160,160 @@ document.addEventListener('DOMContentLoaded', function() {
             descGroup.appendChild(descInput);
             imageContainer.appendChild(descGroup);
 
+            // Add tags field with autocomplete
+            const tagsGroup = document.createElement('div');
+            tagsGroup.className = 'form-group';
+            const tagsLabel = document.createElement('label');
+            tagsLabel.textContent = 'Tags (press Enter to add):';
+            
+            const tagsWrapper = document.createElement('div');
+            tagsWrapper.style.position = 'relative';
+            
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'tags-input-container';
+            const tagsInput = document.createElement('input');
+            tagsInput.type = 'text';
+            tagsInput.placeholder = 'Add tags...';
+            tagsInput.style.border = 'none';
+            tagsInput.style.background = 'transparent';
+            
+            // Autocomplete dropdown
+            const dropdown = document.createElement('div');
+            dropdown.className = 'tags-autocomplete-dropdown';
+            dropdown.style.display = 'none';
+            
+            // Store tags for this image
+            const tags = new Set();
+            let selectedIndex = -1;
+
+            function updateDropdown() {
+                const inputValue = tagsInput.value.trim().toLowerCase();
+                
+                const filtered = existingTags.filter(tag => 
+                    (inputValue === '' || tag.toLowerCase().includes(inputValue)) && !tags.has(tag)
+                );
+                
+                if (filtered.length === 0) {
+                    dropdown.style.display = 'none';
+                    selectedIndex = -1;
+                    return;
+                }
+                
+                dropdown.innerHTML = '';
+                filtered.forEach((tag, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'tags-autocomplete-item';
+                    item.textContent = tag;
+                    item.dataset.index = index;
+                    item.addEventListener('click', () => {
+                        addTag(tag);
+                        tagsInput.value = '';
+                        updateDropdown();
+                    });
+                    dropdown.appendChild(item);
+                });
+                
+                selectedIndex = -1;
+                dropdown.style.display = 'block';
+            }
+
+            function addTag(tag) {
+                if (tag && !tags.has(tag)) {
+                    tags.add(tag);
+                    
+                    // Create tag chip
+                    const chip = document.createElement('div');
+                    chip.className = 'tag-chip';
+                    chip.innerHTML = `${tag}<button type="button">×</button>`;
+                    chip.querySelector('button').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        tags.delete(tag);
+                        chip.remove();
+                        updateDropdown();
+                    });
+                    tagsContainer.insertBefore(chip, tagsInput);
+                    
+                    // Update data attribute
+                    imageContainer.dataset.tags = JSON.stringify(Array.from(tags));
+                }
+            }
+
+            function highlightItem(index) {
+                const items = dropdown.querySelectorAll('.tags-autocomplete-item');
+                items.forEach((item, i) => {
+                    if (i === index) {
+                        item.classList.add('highlighted');
+                        item.scrollIntoView({ block: 'nearest' });
+                    } else {
+                        item.classList.remove('highlighted');
+                    }
+                });
+            }
+
+            tagsInput.addEventListener('focus', updateDropdown);
+            tagsInput.addEventListener('input', updateDropdown);
+            
+            tagsInput.addEventListener('keydown', (e) => {
+                const items = dropdown.querySelectorAll('.tags-autocomplete-item');
+                const isDropdownVisible = dropdown.style.display !== 'none';
+
+                if (e.key === 'ArrowDown') {
+                    if (!isDropdownVisible) {
+                        updateDropdown();
+                        return;
+                    }
+                    e.preventDefault();
+                    selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                    highlightItem(selectedIndex);
+                } else if (e.key === 'ArrowUp') {
+                    if (!isDropdownVisible) return;
+                    e.preventDefault();
+                    selectedIndex = Math.max(selectedIndex - 1, -1);
+                    if (selectedIndex === -1) {
+                        items.forEach(item => item.classList.remove('highlighted'));
+                    } else {
+                        highlightItem(selectedIndex);
+                    }
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (isDropdownVisible && selectedIndex >= 0 && selectedIndex < items.length) {
+                        const tag = items[selectedIndex].textContent;
+                        addTag(tag);
+                        tagsInput.value = '';
+                        updateDropdown();
+                    } else {
+                        const tag = tagsInput.value.trim().toLowerCase();
+                        if (tag) {
+                            addTag(tag);
+                            tagsInput.value = '';
+                            updateDropdown();
+                        }
+                    }
+                } else if (e.key === 'Escape') {
+                    dropdown.style.display = 'none';
+                    selectedIndex = -1;
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!tagsWrapper.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                    selectedIndex = -1;
+                }
+            });
+
+            tagsContainer.appendChild(tagsInput);
+            tagsWrapper.appendChild(tagsContainer);
+            tagsWrapper.appendChild(dropdown);
+            
+            tagsGroup.appendChild(tagsLabel);
+            tagsGroup.appendChild(tagsWrapper);
+            imageContainer.appendChild(tagsGroup);
+
+            // Store tags reference on the container for later retrieval
+            imageContainer.dataset.tags = JSON.stringify(Array.from(tags));
+
             previewGrid.appendChild(imageContainer);
         }
 
@@ -136,7 +321,6 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = !document.querySelectorAll('.image-upload-container').length;
     }
 
-    
     
 
     async function resizeImage(file) {
@@ -212,80 +396,81 @@ document.addEventListener('DOMContentLoaded', function() {
             // Collect all new entries
             let newEntries = [];
     
-// Process each image container
-for (const container of containers) {
-    try {
-        const fileInfo = container.querySelector('.file-info').textContent;
-        const fileName = fileInfo.substring(0, fileInfo.indexOf(' ('));
-        console.log('Looking for file:', fileName);
+            // Process each image container
+            for (const container of containers) {
+                try {
+                    const fileInfo = container.querySelector('.file-info').textContent;
+                    const fileName = fileInfo.substring(0, fileInfo.indexOf(' ('));
+                    console.log('Looking for file:', fileName);
 
-        const file = selectedFiles.get(fileName);
-        if (!file) {
-            console.error(`File not found: ${fileName}`);
-            continue;
-        }
+                    const file = selectedFiles.get(fileName);
+                    if (!file) {
+                        console.error(`File not found: ${fileName}`);
+                        continue;
+                    }
 
-        console.log(`Processing ${fileName}...`);
+                    console.log(`Processing ${fileName}...`);
 
-        const date = container.querySelector('input[type="date"]').value;
-        const description = container.querySelector('textarea').value;
+                    const date = container.querySelector('input[type="date"]').value;
+                    const description = container.querySelector('textarea').value;
+                    const tags = JSON.parse(container.dataset.tags || '[]');
 
-        // Sanitize filename to match ImageKit's transformation
-        const sanitizedFileName = sanitizeFilename(fileName);
-        console.log(`Sanitizing: "${fileName}" → "${sanitizedFileName}"`);
+                    // Sanitize filename to match ImageKit's transformation
+                    const sanitizedFileName = sanitizeFilename(fileName);
+                    console.log(`Sanitizing: "${fileName}" → "${sanitizedFileName}"`);
 
-        // Get fresh auth parameters for each file
-        const authResponse = await fetch(CONFIG.signatureEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ password: uploadPassword })
-        });
+                    // Get fresh auth parameters for each file
+                    const authResponse = await fetch(CONFIG.signatureEndpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ password: uploadPassword })
+                    });
 
-        if (!authResponse.ok) {
-            throw new Error('Failed to get upload authentication');
-        }
+                    if (!authResponse.ok) {
+                        throw new Error('Failed to get upload authentication');
+                    }
 
-        const authData = await authResponse.json();
+                    const authData = await authResponse.json();
 
-        // Resize and upload image
-        const resizedBlob = await resizeImage(file);
-        console.log(`Uploading ${sanitizedFileName} to ImageKit...`);
-        
-        const uploadResult = await new Promise((resolve, reject) => {
-            imagekit.upload({
-                file: resizedBlob,
-                fileName: sanitizedFileName,  // Use sanitized filename
-                token: authData.token,
-                signature: authData.signature,
-                expire: authData.expire,
-                useUniqueFileName: false
-            }, function(err, result) {
-                if (err) {
-                    console.error(`Upload error for ${sanitizedFileName}:`, err);
-                    reject(err);
-                } else {
-                    console.log(`Successfully uploaded ${sanitizedFileName}`);
-                    resolve(result);
+                    // Resize and upload image
+                    const resizedBlob = await resizeImage(file);
+                    console.log(`Uploading ${sanitizedFileName} to ImageKit...`);
+                    
+                    const uploadResult = await new Promise((resolve, reject) => {
+                        imagekit.upload({
+                            file: resizedBlob,
+                            fileName: sanitizedFileName,  // Use sanitized filename
+                            token: authData.token,
+                            signature: authData.signature,
+                            expire: authData.expire,
+                            useUniqueFileName: false
+                        }, function(err, result) {
+                            if (err) {
+                                console.error(`Upload error for ${sanitizedFileName}:`, err);
+                                reject(err);
+                            } else {
+                                console.log(`Successfully uploaded ${sanitizedFileName}`);
+                                resolve(result);
+                            }
+                        });
+                    });
+
+                    // Collect the entry with tags
+                    newEntries.push({
+                        date,
+                        fileName: sanitizedFileName,  // Use sanitized filename
+                        description,
+                        tags
+                    });
+                    console.log(`Added ${sanitizedFileName} to entries with tags:`, tags);
+                } catch (error) {
+                    console.error(`Error processing ${container.querySelector('.file-info').textContent}:`, error);
                 }
-            });
-        });
+            }
 
-        // Collect the entry
-        newEntries.push({
-            date,
-            fileName: sanitizedFileName,  // Use sanitized filename
-            description
-        });
-        console.log(`Added ${sanitizedFileName} to entries`);
-    } catch (error) {
-        console.error(`Error processing ${container.querySelector('.file-info').textContent}:`, error);
-    }
-}
-
-
-console.log('Final entries:', newEntries);
+            console.log('Final entries:', newEntries);
             // Get current photos.yml content
             const [owner, repo] = CONFIG.githubRepo.split('/');
             const photosYmlResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/_data/photos.yml`, {
@@ -304,7 +489,12 @@ console.log('Final entries:', newEntries);
     
             // Add all new entries at once
             const allNewEntries = newEntries
-                .map(entry => `\n\n- date: ${entry.date}\n  image: ${entry.fileName}\n  description: "${entry.description}"`)
+                .map(entry => {
+                    const tagsYaml = entry.tags.length > 0 
+                        ? `[${entry.tags.join(', ')}]`
+                        : '[]';
+                    return `\n\n- date: ${entry.date}\n  image: ${entry.fileName}\n  description: "${entry.description}"\n  tags: ${tagsYaml}`;
+                })
                 .join('');
             
             content = content + allNewEntries;

@@ -8,8 +8,6 @@
   const monthNav        = document.getElementById('month-nav');
   const monthLabel      = document.getElementById('month-label');
   const monthLabelText  = document.getElementById('month-label-text');
-  const monthPrev       = document.getElementById('month-prev');
-  const monthNext       = document.getElementById('month-next');
   const monthDropdown   = document.getElementById('month-dropdown');
   const monthOptions    = Array.from(document.querySelectorAll('.month-option'));
   const tagNav          = document.getElementById('tag-nav');
@@ -34,16 +32,10 @@
     );
   }
 
-  // ─── Month label + prev/next ──────────────────────────────────────────────
+  // ─── Month label ──────────────────────────────────────────────────────────
 
   function setMonthLabel(label) {
     monthLabelText.textContent = label;
-  }
-
-  function updatePrevNextButtons() {
-    const vm = visibleMonths();
-    monthPrev.disabled = currentMonthIndex <= 0;
-    monthNext.disabled = currentMonthIndex >= vm.length - 1;
   }
 
   // ─── Month dropdown ───────────────────────────────────────────────────────
@@ -84,19 +76,11 @@
   monthOptions.forEach(btn => {
     btn.addEventListener('click', () => {
       const monthId = btn.dataset.month;
-      const vm = visibleMonths();
-      const idx = vm.findIndex(m => m.id === monthId);
       closeMonthDropdown();
-      if (idx !== -1) {
-        goToMonthIndex(idx);
-      } else {
-        scrollToMonth(monthId);
-      }
+      scrollToMonth(monthId);
+      highlightActiveMonthOption(monthId);
     });
   });
-
-  monthPrev.addEventListener('click', () => goToMonthIndex(currentMonthIndex - 1));
-  monthNext.addEventListener('click', () => goToMonthIndex(currentMonthIndex + 1));
 
   // ─── Tag dropdown ─────────────────────────────────────────────────────────
 
@@ -180,21 +164,9 @@
 
     updateMonthDropdown();
     syncMonthIndexToScroll();
-    updatePrevNextButtons();
   }
 
   // ─── Month navigation ─────────────────────────────────────────────────────
-
-  function goToMonthIndex(index) {
-    const vm = visibleMonths();
-    if (index < 0 || index >= vm.length) return;
-    currentMonthIndex = index;
-    const m = vm[index];
-    setMonthLabel(m.label);
-    updatePrevNextButtons();
-    scrollToMonth(m.id);
-    highlightActiveMonthOption(m.id);
-  }
 
   function highlightActiveMonthOption(monthId) {
     monthOptions.forEach(btn => {
@@ -282,7 +254,6 @@
     currentMonthIndex = idx;
     setMonthLabel(vm[idx].label);
     highlightActiveMonthOption(monthId);
-    updatePrevNextButtons();
   }
 
   let scrollTicking = false;

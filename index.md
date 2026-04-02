@@ -67,7 +67,6 @@ custom_js:
     {% assign imagekit_full_path = page.imagekit_base_url | append: photo.image %}
     {% assign large_url = imagekit_full_path | append: "?tr=w-1400,h-1400,c-at_max,q-99,f-auto" %}
 
-    {% comment %} Inject month anchor at the first photo of each month {% endcomment %}
     {% if ym != prev_ym %}
       <div id="month-{{ ym }}" class="month-anchor"></div>
       {% assign prev_ym = ym %}
@@ -98,46 +97,48 @@ custom_js:
   {% endfor %}
 </div>
 
-{% comment %} Tag navigator {% endcomment %}
-<div id="tag-nav" aria-label="Taggfilter">
-  <button id="tag-label" aria-haspopup="listbox" aria-expanded="false">
-    <span id="tag-label-text">filtrera</span>
-  </button>
-  <button id="tag-clear" aria-label="Rensa taggfilter" hidden>&#x2715;</button>
+<div id="nav-bar">
 
-  <div id="tag-dropdown" role="listbox" hidden>
-    {% for tag in tags_array %}
-      <button class="tag-option" data-tag="{{ tag }}" role="option" aria-selected="false">{{ tag }}</button>
-    {% endfor %}
+  {% comment %} Tag navigator {% endcomment %}
+  <div id="tag-nav" aria-label="Taggfilter">
+    <button id="tag-label" aria-haspopup="listbox" aria-expanded="false">
+      <span id="tag-label-text">filtrera</span>
+    </button>
+    <button id="tag-clear" aria-label="Rensa taggfilter" hidden>&#x2715;</button>
+
+    <div id="tag-dropdown" role="listbox" hidden>
+      {% for tag in tags_array %}
+        <button class="tag-option" data-tag="{{ tag }}" role="option" aria-selected="false">{{ tag }}</button>
+      {% endfor %}
+    </div>
   </div>
-</div>
 
-{% comment %} Month navigator {% endcomment %}
-<div id="month-nav" aria-label="Månadsnavigation">
-  <button id="month-prev" aria-label="Föregående månad">&#8592;</button>
-  <button id="month-label" aria-haspopup="listbox" aria-expanded="false">
-    <span id="month-label-text">–</span>
-  </button>
-  <button id="month-next" aria-label="Nästa månad">&#8594;</button>
+  {% comment %} Month navigator {% endcomment %}
+  <div id="month-nav" aria-label="Månadsnavigation">
+    <button id="month-label" aria-haspopup="listbox" aria-expanded="false">
+      <span id="month-label-text">–</span>
+    </button>
 
-  <div id="month-dropdown" role="listbox" hidden>
-    {% assign prev_year = "" %}
-    {% for ym in months_array %}
-      {% assign parts = ym | split: '-' %}
-      {% assign y = parts[0] %}
-      {% assign fake_date = ym | append: '-01' %}
-      {% assign month_name = fake_date | date: '%B' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december' %}
+    <div id="month-dropdown" role="listbox" hidden>
+      {% assign prev_year = "" %}
+      {% for ym in months_array %}
+        {% assign parts = ym | split: '-' %}
+        {% assign y = parts[0] %}
+        {% assign fake_date = ym | append: '-01' %}
+        {% assign month_name = fake_date | date: '%B' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december' %}
 
-      {% if y != prev_year %}
-        {% unless prev_year == "" %}</div>{% endunless %}
-        <div class="month-year-group">
-        <span class="month-year-label">{{ y }}</span>
-        {% assign prev_year = y %}
-      {% endif %}
+        {% if y != prev_year %}
+          {% unless prev_year == "" %}</div>{% endunless %}
+          <div class="month-year-group">
+          <span class="month-year-label">{{ y }}</span>
+          {% assign prev_year = y %}
+        {% endif %}
 
-      <button class="month-option" data-month="{{ ym }}" role="option">{{ month_name }}</button>
+        <button class="month-option" data-month="{{ ym }}" role="option">{{ month_name }}</button>
 
-      {% if forloop.last %}</div>{% endif %}
-    {% endfor %}
+        {% if forloop.last %}</div>{% endif %}
+      {% endfor %}
+    </div>
   </div>
+
 </div>

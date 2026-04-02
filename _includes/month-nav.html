@@ -1,0 +1,27 @@
+{% comment %} Month navigator {% endcomment %}
+<div id="month-nav" aria-label="Månadsnavigation">
+  <button id="month-label" aria-haspopup="listbox" aria-expanded="false">
+    <span id="month-label-text">–</span>
+  </button>
+
+  <div id="month-dropdown" role="listbox" hidden>
+    {% assign prev_year = "" %}
+    {% for ym in months_array %}
+      {% assign parts = ym | split: '-' %}
+      {% assign y = parts[0] %}
+      {% assign fake_date = ym | append: '-01' %}
+      {% assign month_name = fake_date | date: '%B' | replace:'January','januari' | replace:'February','februari' | replace:'March','mars' | replace:'April','april' | replace:'May','maj' | replace:'June','juni' | replace:'July','juli' | replace:'August','augusti' | replace:'September','september' | replace:'October','oktober' | replace:'November','november' | replace:'December','december' %}
+
+      {% if y != prev_year %}
+        {% unless prev_year == "" %}</div>{% endunless %}
+        <div class="month-year-group">
+        <span class="month-year-label">{{ y }}</span>
+        {% assign prev_year = y %}
+      {% endif %}
+
+      <button class="month-option" data-month="{{ ym }}" role="option">{{ month_name }}</button>
+
+      {% if forloop.last %}</div>{% endif %}
+    {% endfor %}
+  </div>
+</div>
