@@ -10,8 +10,6 @@ goat_counter: "adamsilen"
 
 favicon: "/site_icon.png"
 
-excerpt_separator: ""
-
 theme_config:
   appearance: "auto"
   back_home_text: "Hem"
@@ -25,40 +23,14 @@ permalink: /:slug.html/
 include:
   - upload
 
-collections:
-  posts:
-    output: true
-  pages:
-    output: true
-
 defaults:
   - scope:
       path: ""
     values:
       custom_js:
         - theme-toggle
-  - scope:
-      path: "_posts"
-      type: "posts"
-    values:
-      layout: post
-      permalink: /skrivet/:year-:month-:day-:title/
-      author: Adam Silén
-  - scope:
-      path: "_pages"
-      type: "pages"
-    values:
-      layout: page
-      permalink: /:title/
-  - scope:
-      path: "_drafts"
-    values:
-      layout: post
-      permalink: /skrivet/:year-:month-:day-:title/
-      sitemap: false
 
 plugins:
-  - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
 

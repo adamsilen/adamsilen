@@ -21,13 +21,13 @@
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
   border-radius: 6px;
   overflow: hidden;
-  opacity: 0; 
-  transition: opacity 1.8s ease-in-out; 
-  will-change: opacity; 
+  opacity: 0;
+  transition: opacity 1.8s ease-in-out;
+  will-change: opacity;
 }
 
 .photo-item.has-loaded .photo-img {
-  opacity: 1; 
+  opacity: 1;
 }
 
 .photo-caption {
@@ -40,11 +40,227 @@
   font-size: 0.9rem;
   color: color-mix(in srgb, var(--text-color) 70%, var(--background-color) 30%);
   text-align: center;
-  opacity: 0; 
+  opacity: 0;
   transition: opacity 1.8s ease-in-out;
   will-change: opacity;
 }
 
 .photo-caption.has-loaded {
-  opacity: 1; 
+  opacity: 1;
+}
+
+/* Tags hidden from captions — only used for JS filtering via data-tags */
+.photo-tags {
+  display: none;
+}
+
+.month-anchor {
+  scroll-margin-top: 3.5rem;
+}
+
+/*===============================
+  Shared nav pill styles
+===============================*/
+
+/* Both navigators sit fixed at the bottom, centred */
+#tag-nav,
+#month-nav {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  background: var(--accent-background);
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  padding: 0.3rem 0.5rem;
+  font-family: var(--theme-font);
+  font-size: 0.8rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+  max-width: calc(100vw - 2rem);
+}
+
+#tag-nav  { bottom: 4.5rem; }
+#month-nav { bottom: 1.5rem; }
+
+#tag-nav button,
+#month-nav button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  font-family: var(--theme-font);
+  font-size: 0.8rem;
+  line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 2rem;
+  min-width: 2rem;
+}
+
+#tag-nav button:hover:not(:disabled),
+#month-nav button:hover:not(:disabled) {
+  background: var(--text-color);
+  color: var(--background-color);
+}
+
+#month-nav button:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+/*===============================
+  Tag navigator
+===============================*/
+
+#tag-label {
+  font-weight: 600;
+  min-width: 5rem;
+  text-align: center;
+  position: relative;
+}
+
+#tag-label.is-active {
+  color: var(--accent-color);
+}
+
+#tag-clear {
+  padding: 0.25rem 0.4rem;
+  font-size: 0.75rem;
+}
+
+/*===============================
+  Tag dropdown
+===============================*/
+
+#tag-dropdown {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  z-index: 101;
+  min-width: 10rem;
+  max-width: calc(100vw - 2rem);
+  max-height: 60vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-background) transparent;
+}
+
+.tag-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.tag-option[aria-selected="true"] {
+  background: var(--accent-background);
+  font-weight: 600;
+  color: var(--accent-color);
+}
+
+/*===============================
+  Month navigator
+===============================*/
+
+#month-label {
+  font-weight: 600;
+  min-width: 9rem;
+  text-align: center;
+  position: relative;
+}
+
+/*===============================
+  Month dropdown
+===============================*/
+
+#month-dropdown {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  z-index: 101;
+  min-width: 12rem;
+  max-width: calc(100vw - 2rem);
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-background) transparent;
+}
+
+.month-year-group {
+  margin-bottom: 0.25rem;
+}
+
+.month-year-label {
+  display: block;
+  font-family: var(--theme-font);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--text-color) 50%, var(--background-color) 50%);
+  padding: 0.4rem 0.5rem 0.2rem;
+  letter-spacing: 0.05em;
+}
+
+.month-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.month-option[aria-selected="true"] {
+  background: var(--accent-background);
+  font-weight: 600;
+}
+
+.month-option.is-hidden,
+.month-year-group.is-hidden {
+  display: none;
+}
+
+/*===============================
+  Mobile adjustments
+===============================*/
+
+@media (max-width: 480px) {
+  #tag-nav,
+  #month-nav {
+    font-size: 0.75rem;
+  }
+
+  #month-label {
+    min-width: 7.5rem;
+  }
+
+  #tag-label {
+    min-width: 4rem;
+  }
+
+  #month-nav { bottom: 1.75rem; }
+  #tag-nav   { bottom: 4.75rem; }
 }

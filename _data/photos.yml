@@ -1,735 +1,914 @@
 - date: 2024-10-24
   image: DSCF3433.jpeg
   description: "Kraftledning"
-  
+  tags: [natur]
+
 - date: 2025-01-24
   image: DSCF5272.jpeg
   description: "Fönstret"
-
+  tags: [abstrakt]
 
 - date: 2024-10-24
   image: DSCF3461.jpeg
   description: "Trädvirvel"
+  tags: [abstrakt, natur]
 
 - date: 2024-11-02
   image: DSCF3619.jpeg
   description: "Hus"
+  tags: [stockholm, arkitektur]
 
 - date: 2024-11-02
   image: DSCF3633.jpeg
   description: "Gamla stan"
-
+  tags: [stockholm]
 
 - date: 2025-02-15
   image: DSCF5440.jpeg
   description: "Citronen var faktiskt till laxsoppan"
+  tags: [mat]
 
 - date: 2025-01-22
   image: DSCF5120.jpeg
   description: "Husfasad"
+  tags: [abstrakt, arkitektur]
 
 - date: 2024-11-02
   image: DSCF3683.jpeg
   description: "Frisk luft och fria tankar"
+  tags: [stockholm, street]
 
 - date: 2024-10-24
   image: DSCF3528.jpeg
   description: "Tunneln under Ljuskärrsberget"
+  tags: [stockholm, street]
 
 - date: 2024-11-02
   image: DSCF3731.jpeg
   description: "Nattrappa"
+  tags: [stockholm]
 
 - date: 2024-12-15
   image: DSCF3947.jpeg
   description: "Skottlinjer"
+  tags: [natur]
 
 - date: 2024-12-01
   image: DSCF3884.jpeg
   description: "Vinter i Erstaviken"
+  tags: [stockholm, natur]
 
 - date: 2024-12-15
   image: DSCF3949.jpeg
   description: "Glömt paraply"
+  tags: [stockholm]
 
 - date: 2024-12-28
   image: DSCF4719.jpeg
   description: "Grön bil, grönt tak"
+  tags: [street]
 
 - date: 2024-12-28
   image: DSCF4729.jpeg
   description: "Övergivet kundvagnspar"
+  tags: [street]
 
 - date: 2025-01-20
   image: DSCF5139.jpeg
   description: "Gamla Stan från Slussen"
+  tags: [stockholm]
 
 - date: 2024-10-02
   image: DSCF0081.jpeg
   description: "Herr och fru kundvagn"
+  tags: [street]
 
 - date: 2025-01-22
   image: DSCF5202.jpeg
   description: "Ekens sista löv"
+  tags: [natur]
 
 - date: 2025-01-21
   image: DSCF5192.jpeg
   description: "Bro mot himlen"
+  tags: [stockholm, svartvitt]
 
 - date: 2025-01-20
   image: DSCF5159.jpeg
   description: "Persontransport"
+  tags: [stockholm, street, svartvitt]
 
 - date: 2025-01-20
   image: DSCF5153.jpeg
   description: "Ljus i tunnelbanan"
+  tags: [stockholm, street, svartvitt]
 
 - date: 2025-01-20
   image: DSCF5151.jpeg
   description: "Vita sneakers"
+  tags: [stockholm, street, svartvitt]
 
 - date: 2025-02-20
   image: DSCF5148.jpeg
   description: "Skugga på perrongen"
+  tags: [stockholm, street, svartvitt]
 
 - date: 2025-01-12
   image: DSCF5108.jpeg
   description: "Planglimt mellan träden"
+  tags: [natur, svartvitt, svartvitt]
 
 - date: 2025-01-12
   image: DSCF5104.jpeg
   description: "Snökanon"
+  tags: [natur, svartvitt]
 
 - date: 2025-01-12
   image: DSCF5103.jpeg
   description: "Skidåkare i Saltis"
+  tags: [stockholm, natur, svartvitt]
 
 - date: 2025-01-12
   image: DSCF5085.jpeg
   description: "Vila i spåret"
+  tags: [stockholm, natur, svartvitt]
 
 - date: 2025-01-02
   image: DSCF5010.jpeg
   description: "Frusen pöl i Skövde"
+  tags: [natur]
 
 - date: 2025-01-01
   image: DSCF4895.jpeg
   description: "Mitt på bordet"
+  tags: [mat]
 
 - date: 2025-01-01
   image: DSCF4891.jpeg
   description: "I glaset"
+  tags: [mat]
 
 - date: 2024-12-01
   image: DSCF3897.jpeg
   description: "Vinterstrand"
+  tags: [natur]
 
 - date: 2024-11-02
   image: DSCF3738.jpeg
   description: "Pargång"
+  tags: [stockholm, street]
 
 - date: 2024-10-24
   image: DSCF3491.jpeg
   description: "Nattgräs"
+  tags: [natur]
 
 - date: 2024-10-24
   image: DSCF3463.jpeg
   description: "Trädvirvel ii"
+  tags: [abstrakt, natur]
 
 - date: 2025-02-26
   image: DSCF5494.jpeg
   description: "Lager och nyanser av grenar"
+  tags: [svartvitt, natur]
 
 - date: 2025-02-28
   image: DSCF5568.JPG
   description: "Saltsjöbanan kommer"
+  tags: [stockholm, svartvitt]
 
 - date: 2025-02-28
   image: DSCF5571.JPG
   description: "Spöktåg"
+  tags: [stockholm]
 
 - date: 2025-02-28
   image: DSCF5550.JPG
   description: "Elljusspåret"
+  tags: [stockholm, natur]
 
 - date: 2025-02-28
   image: DSCF5499.JPG
   description: "Vänd på Ljuskärrsberget"
+  tags: [stockholm]
 
 - date: 2025-02-28
   image: DSCF5508.JPG
   description: "Parkerad i dimman"
+  tags: [stockholm]
 
 - date: 2024-10-04
   image: DSCF0410.jpeg
   description: "Efter stammen"
+  tags: [natur]
 
 - date: 2025-03-01
   image: DSCF5591.jpeg
   description: "Uti vassen"
+  tags: [natur]
 
 - date: 2025-03-07
   image: DSCF5651.jpeg
   description: "Tak"
+  tags: [stockholm, svartvitt]
 
 - date: 2025-03-07
   image: DSCF5654.jpeg
   description: "Folkungagatan"
+  tags: [stockholm]
 
 - date: 2025-03-07
   image: DSCF5715.jpeg
   description: "Väntar"
+  tags: [stockholm, svartvitt]
 
 - date: 2025-03-09
   image: DSCF5797.jpeg
   description: "Lyser"
+  tags: [stockholm]
 
 - date: 2025-03-16
   image: DSCF6149.jpeg
   description: "Vårskugga"
+  tags: [stockholm, natur]
 
 - date: 2025-03-16
   image: DSCF6159.jpeg
   description: "Leder"
+  tags: [abstrakt, svartvitt]
 
 - date: 2025-04-05
   image: DSCF6838.jpeg
   description: "Väntar på båten"
+  tags: [stockholm]
 
 - date: 2025-04-10
   image: DSCF6997.jpeg
   description: "Gröna toppar"
+  tags: [stockholm, natur]
 
 - date: 2025-04-10
   image: DSCF7000.jpeg
   description: "Toppar"
+  tags: [abstrakt, natur]
 
 - date: 2025-04-10
   image: DSCF7011.jpeg
   description: "Gräver upp gatan"
+  tags: [stockholm]
 
 - date: 2025-04-12
   image: DSCF7101.jpeg
   description: "Vila i viken"
+  tags: [stockholm, street]
 
 - date: 2025-04-12
   image: DSCF7114.jpeg
   description: "Allergikottar"
+  tags: [natur]
 
 - date: 2025-04-12
   image: DSCF7120.jpeg
   description: "Fotar"
+  tags: [stockholm, natur]
 
 - date: 2025-04-12
   image: DSCF7134.jpeg
   description: "På ryggen"
+  tags: [natur]
 
 - date: 2024-10-05
   image: IMG_9815.jpeg
   description: "Nödutgång"
+  tags: [street, arkitektur]
 
 - date: 2025-04-14
   image: DSCF7186.jpeg
   description: "Vilande golfbana"
+  tags: [stockholm, natur]
 
 - date: 2024-10-07
   image: DSCF1093.jpeg
   description: "Macken vid Tippen"
+  tags: [stockholm]
 
 - date: 2024-10-02
   image: DSCF0142.jpeg
   description: "Teamsbakgrunden"
+  tags: [natur]
 
 - date: 2024-10-07
   image: DSCF1076.jpeg
   description: "Vägarna möts"
+  tags: [svartvitt, abstrakt]
 
 - date: 2024-10-07
   image: DSCF1085.jpeg
   description: "Lager av natten"
+  tags: [svartvitt, abstrakt]
 
 - date: 2024-10-07
   image: DSCF1111.jpeg
   description: "Skräcktvätten"
+  tags: [stockholm]
 
 - date: 2024-07-11
   image: IMG_4478.jpeg
   description: "Barr i parken"
+  tags: [natur]
 
 - date: 2024-07-06
   image: IMG_4130.jpeg
   description: "Solnedgång över De Pier"
+  tags: [nederländerna]
 
 - date: 2024-02-25
   image: IMG_9750-Edit.jpeg
   description: "Korre i Sjöstan"
+  tags: [djur, natur]
 
 - date: 2024-02-18
   image: IMG_9414-Edit.jpeg
   description: "Mandarinand i Årstaviken"
+  tags: [natur, djur]
 
 - date: 2024-02-18
   image: IMG_9301.jpeg
   description: "Fasader i Årsta"
+  tags: [stockholm, arkitektur]
 
 - date: 2024-02-17
   image: IMG_9064-Edit.jpeg
   description: "Våren är lagd på is"
+  tags: [djur, natur]
 
 - date: 2024-02-11
   image: IMG_8645-Edit.jpeg
   description: "Dörr"
+  tags: [stockholm, abstrakt]
 
 - date: 2024-01-29
   image: IMG_7863.jpeg
   description: "Gråhäger vid Råstasjön"
+  tags: [stockholm, djur, natur]
 
 - date: 2024-01-28
   image: IMG_7389-Edit.jpeg
   description: "Herr bäver"
+  tags: [stockholm, djur, natur]
 
 - date: 2024-01-28
   image: IMG_6515.jpeg
   description: "Ung om näbben"
+  tags: [stockholm, djur, natur]
 
 - date: 2024-01-27
   image: IMG_6228-Edit.jpeg
   description: "Stolt mandarinand"
+  tags: [stockholm, djur, natur]
 
 - date: 2023-11-11
   image: IMG_2978.jpeg
   description: "Blott ett bär"
+  tags: [natur]
 
 - date: 2023-11-11
   image: IMG_2988.jpeg
   description: "Blött i blomman"
+  tags: [natur]
 
 - date: 2023-10-04
   image: IMG_0107-Edit.jpeg
   description: "Serbisk misse"
+  tags: [djur]
 
 - date: 2023-09-25
   image: IMG_8895-Enhanced-NR.jpeg
   description: "Ölos"
+  tags: [stockholm, arkitektur]
 
 - date: 2023-09-25
   image: IMG_8872-Enhanced-NR-2.jpeg
   description: "Himlen bortom Folksam"
+  tags: [stockholm]
 
 - date: 2023-09-12
   image: IMG_8337-Edit.jpeg
   description: "Konferens i Barcelona"
+  tags: [barcelona, arkitektur]
 
 - date: 2023-08-23
   image: IMG_7624-Pano-Edit.jpeg
   description: "Sträcker sig"
+  tags: [arkitektur, stockholm, abstrakt]
 
 - date: 2023-08-21
   image: IMG_7467-HDR.jpeg
   description: "Över Söder"
+  tags: [stockholm, arkitektur]
 
 - date: 2023-08-17
   image: IMG_5835-Enhanced-NR-2.jpeg
   description: "Pippi på rep"
+  tags: [djur, natur]
 
 - date: 2023-08-14
   image: IMG_3992_Nik.jpeg
   description: "Osäker måstonåring"
+  tags: [djur, natur]
 
 - date: 2023-08-11
   image: IMG_2560_Nik.jpeg
   description: "Trut"
+  tags: [djur, natur]
 
 - date: 2024-05-26
   image: IMG_3093-Edit.jpeg
   description: "Dunboll på äventyr"
+  tags: [natur, djur]
 
 - date: 2025-04-19
   image: DSCF7302.jpeg
   description: "Gick fel. Men hamnade rätt."
+  tags: [japan, arkitektur]
 
 - date: 2025-04-19
   image: DSCF7327.jpeg
   description: "Izakaya cat walk."
+  tags: [japan, street]
 
 - date: 2025-04-19
   image: DSCF7333.jpeg
-  description: "Tomare! "
+  description: "Tomare!"
+  tags: [japan, street]
 
 - date: 2025-04-20
   image: DSCF7370.jpeg
   description: "Back to Ginza"
+  tags: [japan]
 
 - date: 2025-04-20
   image: DSCF7393.jpeg
   description: "Walk the line"
+  tags: [japan, street]
 
 - date: 2025-04-20
   image: DSCF7399.jpeg
   description: "Till tuben"
+  tags: [japan, street]
 
 - date: 2025-04-20
   image: DSCF7425.jpeg
   description: "Kom och ät – inom designerat område"
+  tags: [japan]
 
 - date: 2025-04-20
   image: DSCF7445.jpeg
   description: "Kannon-sama"
+  tags: [japan, street]
 
 - date: 2025-04-20
   image: DSCF7446.jpeg
-  description: "Bakom kulisserna "
+  description: "Bakom kulisserna"
+  tags: [japan, street]
 
 - date: 2025-04-20
   image: DSCF7496.jpeg
   description: "Senso-ji"
+  tags: [japan, arkitektur]
 
 - date: 2025-04-20
   image: DSCF7517.jpeg
   description: "Betong och ledningar"
+  tags: [japan, arkitektur, arkitektur]
 
 - date: 2025-04-20
   image: DSCF7537.jpeg
   description: "Öppen gata i Akihabara"
+  tags: [japan, street]
 
 - date: 2025-04-20
   image: DSCF7551.jpeg
   description: "Game, cafe, drink"
+  tags: [japan, street]
 
 - date: 2025-04-20
   image: DSCF7570.jpeg
   description: "Tsubaki cafe"
+  tags: [japan, street]
 
 - date: 2025-04-21
   image: DSCF7717.jpeg
   description: "Sukai tsurī"
+  tags: [japan, arkitektur]
 
 - date: 2025-04-21
   image: DSCF7768.jpeg
   description: "Genom disen"
+  tags: [japan, arkitektur]
 
 - date: 2025-04-21
   image: DSCF7776.jpeg
   description: "450 meter upp"
+  tags: [japan, arkitektur]
 
 - date: 2025-04-21
   image: DSCF7792.jpeg
   description: "En höjdare"
+  tags: [japan, arkitektur]
 
 - date: 2025-04-21
   image: DSCF7798.jpeg
   description: "Taiwanesisk festival"
+  tags: [japan]
 
 - date: 2025-04-21
   image: DSCF7823.jpeg
   description: "Solblänk"
+  tags: [japan, arkitektur]
 
 - date: 2025-04-21
   image: DSCF7829.jpeg
   description: "Vimmel"
+  tags: [japan, street]
 
 - date: 2025-04-21
   image: DSCF7808.jpeg
   description: "Bygge"
+  tags: [japan, arkitektur]
 
 - date: 2025-04-21
   image: DSCF7852.jpeg
   description: "Svenskt öl på andra sidan världen"
+  tags: [japan, mat]
 
 - date: 2025-04-21
   image: DSCF7884.jpeg
   description: "Tokyo metro commuting"
+  tags: [japan]
 
 - date: 2025-04-21
   image: DSCF7891.jpeg
   description: "Tsubaki cafe ii"
-
-- date: 2025-04-23
-  image: DSCF8227.jpeg
-  description: "Öl i Golden Gai"
-
-- date: 2025-04-22
-  image: DSCF8133.jpeg
-  description: "Förbjudet att luta sig över kanten"
+  tags: [japan, street]
 
 - date: 2025-04-22
   image: DSCF8099.jpeg
   description: "Bambu"
+  tags: [japan, natur]
 
 - date: 2025-04-22
-  image: DSCF8208.jpeg
-  description: "Fuji"
+  image: DSCF8133.jpeg
+  description: "Förbjudet att luta sig över kanten"
+  tags: [japan, street]
 
 - date: 2025-04-22
   image: DSCF8153.jpeg
   description: "Shinjuku"
+  tags: [japan, street]
+
+- date: 2025-04-22
+  image: DSCF8208.jpeg
+  description: "Fuji"
+  tags: [japan, mat]
+
+- date: 2025-04-23
+  image: DSCF8227.jpeg
+  description: "Öl i Golden Gai"
+  tags: [japan, mat]
 
 - date: 2025-04-24
   image: DSCF8456.jpeg
   description: "Tuben"
+  tags: [japan, street]
 
 - date: 2025-04-25
   image: DSCF8440.jpeg
   description: "Furenchi Bar"
+  tags: [japan, street]
 
 - date: 2025-04-25
   image: DSCF8597.jpeg
   description: "Torii vid Inari"
+  tags: [japan]
 
 - date: 2025-04-25
   image: DSCF8667.jpeg
   description: "Torii"
+  tags: [japan]
 
 - date: 2025-04-25
   image: DSCF8695.jpeg
   description: "Torii"
+  tags: [japan]
 
 - date: 2025-04-25
   image: DSCF8732.jpeg
   description: "Mot Tōji"
-
-- date: 2025-04-26
-  image: DSCF8837.jpeg
-  description: "Gavel à la Kyōto"
-
-- date: 2025-04-26
-  image: DSCF8844.jpeg
-  description: "Gavel"
+  tags: [japan, street]
 
 - date: 2025-04-25
   image: DSCF8768.jpeg
   description: "Tōji"
+  tags: [japan, arkitektur]
 
-- date: 2025-04-28
-  image: DSCF9101.jpeg
-  description: "Under Nidec Kyōto Tower"
+- date: 2025-04-26
+  image: DSCF8837.jpeg
+  description: "Gavel à la Kyōto"
+  tags: [japan, arkitektur]
 
-- date: 2025-04-29
-  image: DSCF9247.jpeg
-  description: "Osaka slott"
-
-- date: 2025-04-29
-  image: DSCF9216.jpeg
-  description: "Försvarstorn"
-
-- date: 2025-04-29
-  image: DSCF9174.jpeg
-  description: "Tenjin-bashi"
-
-- date: 2025-04-29
-  image: DSCF9255.jpeg
-  description: "Stekt ris i Ōsaka"
-
-- date: 2025-04-27
-  image: DSCF8905.jpeg
-  description: "Bambuskog"
-
-- date: 2025-04-27
-  image: DSCF8932.jpeg
-  description: "Japansk lönn i tre färger "
-
-- date: 2025-04-27
-  image: DSCF8943.jpeg
-  description: "Stamklättrare"
-
-- date: 2025-04-27
-  image: DSCF8965.jpeg
-  description: "Båttur"
-
-- date: 2025-04-27
-  image: DSCF8991.jpeg
-  description: "Stornäbbad kråka"
-
-- date: 2025-04-27
-  image: DSCF8989.jpeg
-  description: "Koll runt hörnet"
-
-- date: 2025-04-27
-  image: DSCF9006.jpeg
-  description: "Filosoferande apa"
-
-- date: 2025-04-27
-  image: DSCF9054.jpeg
-  description: "Procession med mikoshi"
+- date: 2025-04-26
+  image: DSCF8844.jpeg
+  description: "Gavel"
+  tags: [japan, arkitektur]
 
 - date: 2025-04-26
   image: DSCF8857.jpeg
   description: "Bakgata i Gion"
+  tags: [japan, street]
 
 - date: 2025-04-27
   image: DSCF8880.jpeg
   description: "Bambustam"
+  tags: [japan, natur]
 
-- date: 2025-05-03
-  image: DSCF9830.jpeg
-  description: "Lager av betong och lövverk"
+- date: 2025-04-27
+  image: DSCF8905.jpeg
+  description: "Bambuskog"
+  tags: [japan, natur]
 
-- date: 2025-05-03
-  image: DSCF9823.jpeg
-  description: "Under verk"
+- date: 2025-04-27
+  image: DSCF8932.jpeg
+  description: "Japansk lönn i tre färger"
+  tags: [japan, natur]
 
-- date: 2025-05-03
-  image: DSCF9812.jpeg
-  description: "Möte med hav och himmel"
+- date: 2025-04-27
+  image: DSCF8943.jpeg
+  description: "Stamklättrare"
+  tags: [japan, natur]
 
-- date: 2025-05-03
-  image: DSCF9802.jpeg
-  description: "Mot KIX"
+- date: 2025-04-27
+  image: DSCF8965.jpeg
+  description: "Båttur"
+  tags: [japan]
 
-- date: 2025-05-03
-  image: DSCF9791.jpeg
-  description: "Osakabukten"
+- date: 2025-04-27
+  image: DSCF8989.jpeg
+  description: "Koll runt hörnet"
+  tags: [japan, street]
 
-- date: 2025-05-03
-  image: DSCF9784.jpeg
-  description: "Rinku no hoshi"
+- date: 2025-04-27
+  image: DSCF8991.jpeg
+  description: "Stornäbbad kråka"
+  tags: [japan, djur]
 
-- date: 2025-05-03
-  image: DSCF9780.jpeg
-  description: "Barriär"
+- date: 2025-04-27
+  image: DSCF9006.jpeg
+  description: "Filosoferande apa"
+  tags: [japan, djur]
 
-- date: 2025-05-02
-  image: DSCF9754.jpeg
-  description: "Inomhusgata"
+- date: 2025-04-27
+  image: DSCF9054.jpeg
+  description: "Procession med mikoshi"
+  tags: [japan, street]
 
-- date: 2025-05-02
-  image: DSCF9729.jpeg
-  description: "Trappor"
+- date: 2025-04-28
+  image: DSCF9101.jpeg
+  description: "Under Nidec Kyōto Tower"
+  tags: [japan, street]
 
-- date: 2025-05-02
-  image: DSCF9727.jpeg
-  description: "Umeda"
+- date: 2025-04-29
+  image: DSCF9174.jpeg
+  description: "Tenjin-bashi"
+  tags: [japan, arkitektur, abstrakt]
 
-- date: 2025-05-02
-  image: DSCF9722.jpeg
-  description: "Umeda Sky Building"
+- date: 2025-04-29
+  image: DSCF9216.jpeg
+  description: "Försvarstorn"
+  tags: [japan, arkitektur]
 
-- date: 2025-05-02
-  image: DSCF9721.jpeg
-  description: "Osaka Station"
+- date: 2025-04-29
+  image: DSCF9247.jpeg
+  description: "Osaka slott"
+  tags: [japan, arkitektur]
 
-- date: 2025-05-01
-  image: DSCF9702.jpeg
-  description: "Natt i Osaka"
+- date: 2025-04-29
+  image: DSCF9255.jpeg
+  description: "Stekt ris i Ōsaka"
+  tags: [japan, mat]
 
 - date: 2025-05-01
   image: DSCF9686.jpeg
   description: "Takoyaki (nattmacka i Osaka)"
+  tags: [japan, mat]
+
+- date: 2025-05-01
+  image: DSCF9702.jpeg
+  description: "Natt i Osaka"
+  tags: [japan, street]
+
+- date: 2025-05-02
+  image: DSCF9721.jpeg
+  description: "Osaka Station"
+  tags: [japan, street]
+
+- date: 2025-05-02
+  image: DSCF9722.jpeg
+  description: "Umeda Sky Building"
+  tags: [japan, arkitektur]
+
+- date: 2025-05-02
+  image: DSCF9727.jpeg
+  description: "Umeda"
+  tags: [japan, arkitektur]
+
+- date: 2025-05-02
+  image: DSCF9729.jpeg
+  description: "Trappor"
+  tags: [japan]
+
+- date: 2025-05-02
+  image: DSCF9754.jpeg
+  description: "Inomhusgata"
+  tags: [japan, street]
+
+- date: 2025-05-03
+  image: DSCF9780.jpeg
+  description: "Barriär"
+  tags: [japan]
+
+- date: 2025-05-03
+  image: DSCF9784.jpeg
+  description: "Rinku no hoshi"
+  tags: [japan]
+
+- date: 2025-05-03
+  image: DSCF9791.jpeg
+  description: "Osakabukten"
+  tags: [japan, natur]
+
+- date: 2025-05-03
+  image: DSCF9802.jpeg
+  description: "Mot KIX"
+  tags: [japan, svartvitt]
+
+- date: 2025-05-03
+  image: DSCF9812.jpeg
+  description: "Möte med hav och himmel"
+  tags: [japan, natur]
+
+- date: 2025-05-03
+  image: DSCF9823.jpeg
+  description: "Under verk"
+  tags: [japan, arkitektur]
+
+- date: 2025-05-03
+  image: DSCF9830.jpeg
+  description: "Lager av betong och lövverk"
+  tags: [japan, arkitektur]
 
 - date: 2025-06-08
   image: DSCF0003-2.jpg
   description: "Mitt i mattan"
+  tags: [natur]
 
 - date: 2025-06-29
   image: DSCF0685.jpeg
   description: "Brandgul bland gult"
+  tags: [stockholm, street]
 
 - date: 2025-06-30
   image: DSCF0668.jpeg
   description: "Strategiskt placerad för att folk att stanna upp"
-
-- date: 2025-07-07
-  image: DSCF0764.jpeg
-  description: "Semesterkaffe > kontorskaffe"
-
-- date: 2025-07-07
-  image: DSCF0759.jpeg
-  description: "Skumt"
+  tags: [stockholm, arkitektur]
 
 - date: 2025-07-05
   image: DSCF0735.jpeg
   description: "Fläder och flärd"
+  tags: [mat]
 
-- date: 2025-07-20
-  image: DSCF1554.jpeg
-  description: "IPA från Vaat direkt från källan"
+- date: 2025-07-07
+  image: DSCF0759.jpeg
+  description: "Skumt"
+  tags: [mat]
 
-- date: 2025-07-19
-  image: DSCF1390.jpeg
-  description: "Berliner Weisse"
+- date: 2025-07-07
+  image: DSCF0764.jpeg
+  description: "Semesterkaffe > kontorskaffe"
+  tags: [mat]
 
 - date: 2025-07-19
   image: DSCF1346.jpeg
   description: "Teletorn. Aldrig suttit med fötterna över kanten så högt upp."
+  tags: [estland, arkitektur]
 
-- date: 2025-08-31
+- date: 2025-07-19
+  image: DSCF1390.jpeg
+  description: "Berliner Weisse"
+  tags: [estland, mat]
+
+- date: 2025-07-20
+  image: DSCF1554.jpeg
+  description: "IPA från Vaat direkt från källan"
+  tags: [estland, mat]
+
+- date: 2025-04-21
   image: DSCF7900_DxO.jpg
-  description: "Throwback till Tokyo"
+  description: "Tokyo"
+  tags: [japan, street]
 
-- date: 2025-08-31
+- date: 2025-04-21
   image: DSCF7903_2_DxO.jpg
   description: "Mot gatan"
+  tags: [japan]
 
 - date: 2025-09-01
   image: DSCF0592_DxO.jpg
   description: "Båt bakom buske"
-
-- date: 2025-09-10
-  image: DSCF2901_Nik.jpeg
-  description: "Kalemagdan"
-
-- date: 2025-09-10
-  image: DSCF2899_Nik.jpeg
-  description: "Sightseeing"
+  tags: [natur]
 
 - date: 2025-09-10
   image: DSCF2856_Nik.jpeg
   description: "Salto"
+  tags: [belgrad, mat]
 
+- date: 2025-09-10
+  image: DSCF2899_Nik.jpeg
+  description: "Sightseeing"
+  tags: [belgrad]
 
-- date: 2025-11-29
-  image: DSCF7932_Nik.jpeg
-  description: "i. Tittar upp och tänker på Tokyo."
+- date: 2025-09-10
+  image: DSCF2901_Nik.jpeg
+  description: "Kalemagdan"
+  tags: [belgrad]
 
-- date: 2025-11-29
+- date: 2025-04-21
   image: DSCF7714_Nik.jpeg
   description: "ii. Tittar upp och tänker på Tokyo."
+  tags: [japan, arkitektur]
 
-- date: 2025-11-29
+- date: 2025-04-21
   image: DSCF7924_Nik.jpeg
-  description: "Cross walking (Tokyo 2025-05)"
+  description: "Cross walking"
+  tags: [japan, street]
 
-- date: 2025-11-30
+- date: 2025-04-21
+  image: DSCF7932_Nik.jpeg
+  description: "i. Tittar upp och tänker på Tokyo."
+  tags: [japan, arkitektur]
+
+- date: 2025-04-21
   image: DSCF7966_Nik.jpeg
-  description: "Gatukök (Tokyo 2025-04)"
+  description: "Gatukök"
+  tags: [japan, mat]
 
-- date: 2025-11-30
+- date: 2025-04-21
   image: DSCF8389-DxO_DeepPRIME_XD3_X-Trans_NIK.jpeg
-  description: "Röd gubbe (Tokyo 2025-04)"
+  description: "Röd gubbe"
+  tags: [japan, street]
 
-- date: 2025-11-30
+- date: 2025-04-21
   image: DSCF8396-DxO_DeepPRIME_XD3_X-Trans.jpeg
-  description: "Hissalternativ (Tokyo 2025-04)"
+  description: "Hissalternativ"
+  tags: [japan]
 
-- date: 2025-11-30
+- date: 2025-04-27
   image: DSCF8906-001_NIK.jpg
-  description: "Bambuskog (Kyoto 2025-04)"
+  description: "Bambuskog"
+  tags: [japan, natur]
 
-- date: 2025-12-01
+- date: 2025-04-26
   image: DSCF8850-001_NIK.jpeg
-  description: "Gion (Kyoto 2025-04)"
+  description: "Gion"
+  tags: [japan, street]
 
-- date: 2025-12-07
+- date: 2025-07-20
+  image: DSCF1515-001_NIK.jpg
+  description: "I farten genom genomfarten"
+  tags: [estland, street]
+
+- date: 2025-07-20
   image: DSCF1519-001_NIK_1_.jpeg
   description: " "
+  tags: [estland, svartvitt]
 
-- date: 2025-12-07
+- date: 2025-07-21
+  image: DSCF1632-001_NIK.jpg
+  description: "Stolpboll"
+  tags: [estland, natur]
+
+- date: 2025-07-21
   image: DSCF1636-001_NIK.jpeg
-  description: " "
+  description: "Bollkorg"
+  tags: [estland]
 
 - date: 2025-12-07
   image: DSCF2960-001_NIK_1_.jpeg
   description: " "
-
-
-- date: 2025-12-07
-  image: DSCF1632-001_NIK.jpg
-  description: "Stolpboll"
-
-- date: 2025-12-07
-  image: DSCF1515-001_NIK.jpg
-  description: "I farten genom genomfarten"
+  tags: [stockholm]
 
 - date: 2026-04-02
   image: DSCF5028-2bw.jpeg
   description: "Självporträtt"
+  tags: [människor]

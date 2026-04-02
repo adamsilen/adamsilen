@@ -1,4 +1,6 @@
-/*===============================\n  Typography\n===============================*/
+/*===============================
+  Typography
+===============================*/
 
 h1 {
   font-size: 2.5rem;
@@ -28,13 +30,17 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
     font-style: italic;
   }
 
-  /*===============================\n    Header\n  ===============================*/
+  /*===============================
+    Header
+  ===============================*/
 
   header h1 {
     margin-block-end: 1.5rem;
   }
   
-  /*===============================\n    Lists\n  ===============================*/
+  /*===============================
+    Lists
+  ===============================*/
   
   ul {
     list-style-position: outside;
@@ -93,49 +99,9 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
     font-family: var(--theme-font);
   }
   
-  /* Checkboxes */
-  
-  label {
-    display: flex;
-    align-items: baseline;
-    margin-top: 1rem;
-    user-select: text;
-    -webkit-tap-highlight-color: transparent;
-  }
-  
-  input[type="checkbox"] {
-    margin-right: 1rem;
-    transform: scale(1.5);
-    accent-color: var(--accent-color);
-  }
-  
-  input[type="checkbox"]:focus {
-    outline-width: 0.2rem;
-    outline-color: var(--text-color); 
-  }
-  
-  /* Page Links */
-  
-  .page-links {
-    font-size: 1.2em;
-  }
-  
-  .page-links li {
-    margin: 1rem 0.2rem 1rem -2rem;
-    padding-left: 1.8em;
-    background-image: url(../../../site_icon.png);
-    background-repeat: no-repeat;
-    background-position: 0px 2px;
-    background-size: 20px 20px;
-  }
-
-  .page-links li {
-    /* ... other styles ... */
-    background-image: url(../../../site_icon.png);
-  }
-  
-  
-  /*===============================\n    Links\n  ===============================*/
+  /*===============================
+    Links
+  ===============================*/
   
   *:target {
     background-color: var(--accent-background);
@@ -207,25 +173,9 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
     padding: 0;
   }
   
-  /*===============================\n    Pagination\n  ===============================*/
-  
-  .pagination {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8rem;
-  }
-  
-  @media (max-width: 600px) {
-    .pagination {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-top: 8rem;
-    }
-  }
-  
-  /*===============================\n    Horizontal Rule\n  ===============================*/
+  /*===============================
+    Horizontal Rule
+  ===============================*/
   
   hr {
     margin: 4rem 0;
@@ -241,7 +191,9 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
   }
 
   
-  /*===============================\n    Tables\n  ===============================*/
+  /*===============================
+    Tables
+  ===============================*/
   
   table,
   th,
@@ -253,82 +205,9 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
     table-layout: fixed;
   }
   
-  table.character-table {
-    border-collapse: collapse;
-    border: none;
-    width: auto;
-    font-size: 1.4rem;
-    margin: 2rem 0;
-  }
-  
-  .character-table th, td {
-    border: none;
-    padding: 0.6rem 1.2rem;
-    width: auto;
-  }
-  
-  .characther-table th:first-child, td:first-child {
-    font-weight: bold;
-  }
-  
-  /*===============================\n    Code\n  ===============================*/
-  
-  code {
-    background-color: var(--accent-background);
-    color: var(--text-color);
-    font-family: var(--body-font);
-  }
-  
-  code.kaomoji {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    white-space: nowrap;
-    display: inline-block;
-  }
-  
-  div.highlighter-rouge code {
-    display: block;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    padding: 1rem;
-  }
-
-  .ascii code {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    white-space: nowrap;
-    display: inline-block;
-    font-size: calc(8px + (16 - 6) * ((100vw - 300px) / (1600 - 300)));
-  }
-  
-  
-  /*===============================\n    Blockquote\n  ===============================*/
-  
-  blockquote {
-    font-style: normal;
-    border: 2px dotted var(--text-color);
-    padding: 0rem 1.5rem;
-    margin-inline-start: 0;
-    margin-inline-end: 0;
-    margin: 2em 0;
-  }
-  
-  blockquote p {
-    margin: 1em 0;
-  }
-  
-  .example {
-    padding: 1rem 1.6rem;
-    margin: 2rem 0; 
-    border: none;
-  }
-  
-  .example strong {
-    border-bottom: 2px dotted;
-    font-weight: unset;
-  }
-  
-  /*===============================\n    Images\n  ===============================*/
+  /*===============================
+    Images
+  ===============================*/
   
   img {
     max-width: 100%;
@@ -339,20 +218,9 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
     margin: 0 auto;
   }
   
-  .no-results-images {
-    display: flex;
-    justify-content: flex-start;
-    gap: 0.8rem;
-  }
-  
-  .no-results-images img {
-    max-width: 1.5rem;
-    height: auto;
-    margin: 0;
-  }
-  
-  /*===============================\n    Miscellaneous\n  ===============================*/
-  
+  /*===============================
+    Miscellaneous
+  ===============================*/
   
   .space-above {
     margin-top: 6rem;
@@ -362,8 +230,10 @@ h3 { font-size: 1.2rem; line-height: 1.4; }
     font-size: 0.5rem;
   }
   
-  
-/*===============================\n    Theme Toggle\n  ===============================*/
+
+/*===============================
+    Theme Toggle
+  ===============================*/
 
 
   .theme-toggle-container {
@@ -399,66 +269,4 @@ header .theme-toggle-container {
 
 #theme-toggle-icon {
   vertical-align: middle;
-}
-
-/*===============================\n    Post-related\n  ===============================*/
-
-  .excerpt {
-    margin-top: 0.2rem;
-    font-size: 0.9rem;
-  }
-
-  .post-list-title {
-    font-weight: bold;
-    margin-top: 0.2rem;
-    display: inline-block;
-    font-family: "IBM Plex Mono", monospace;
-  }
-
-  .post-date {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--text-color);
-  }
-  
-  .post-list li {
-    margin-bottom: 2em;
-  }
-
-  .more-link {
-    text-align: right;
-  }
-
-  .post-meta {
-    text-align: right;
-  }
-
-  /*===============================\n    Footnotes\n  ===============================*/
-
- sup[id^="fnref"] { 
-      font-size: 1rem; 
-      top: unset; 
-      position: relative;
-      line-height: 0;
-      font-family: var(--theme-font);
-    }
-  
- sup[id^="fnref"] a {
-      text-decoration: none;
-      padding: 0 0.2rem;
-      font-weight: bold;
-    }
-
- sup[id^="fnref"] a::before {
-  content: "[";
-}
-
-sup[id^="fnref"] a::after {
-  content: "]";
-}
-
-.reversefootnote {
-  margin-left: 1rem;
-  font-family: var(--theme-font);
-  font-size: 0.8rem;
 }
